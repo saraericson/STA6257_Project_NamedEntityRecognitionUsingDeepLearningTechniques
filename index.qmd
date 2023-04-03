@@ -11,7 +11,7 @@ bibliography: references.bib # file contains bibtex for references
 ---
 
 ## Introduction
-Named Entity Recognition (referred to as NER) referrs to the process of 
+Named Entity Recognition (referred to as NER) refers to the process of 
 
 ## Methods
 
