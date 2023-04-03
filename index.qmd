@@ -1,6 +1,6 @@
 ---
-title: "Named Entity Recognition using Deep Learning Techniques"
-author: "Andrew Campbell, Sara Ericson, Jorge Sanchez"
+title: "Sample Report"
+author: "Student Name"
 date: '`r Sys.Date()`'
 format:
   html:
