@@ -1,6 +1,6 @@
 ---
-title: "Report Sample"
-author: "Student name"
+title: "Named Entity Recognition using Deep Learning Techniques"
+author: "Andrew Campbell, Sara Ericson, Jorge Sanchez"
 date: '`r Sys.Date()`'
 format:
   html:
