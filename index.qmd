@@ -11,7 +11,16 @@ bibliography: references.bib # file contains bibtex for references
 ---
 
 ## Introduction
-Named Entity Recognition (referred to as NER) refers to the process of 
+Named Entity Recognition (NER) is a critical component in Natural Language Processing (NLP) that aims to identify and extract named entities from unstructured text. It is a challenging task due to the complexity and ambiguity of natural language, and it plays a vital role in various NLP applications such as information retrieval, question answering, and machine translation. In recent years, deep learning techniques have shown great promise in achieving state-of-the-art results in NER tasks. Deep learning is a subset of machine learning that involves training artificial neural networks to learn from data and make predictions. One of the most popular deep learning architectures for NER is the Transformer model, which was introduced in 2017 and has since become a cornerstone of modern NLP. In addition to the Transformer model, there are many other deep learning techniques that have been applied to NER, including Recurrent Neural Networks (RNNs), Convolutional Neural Networks (CNNs), and Bidirectional Encoder Representations from Transformers (BERT), among others. In this research project, we explore various deep learning techniques for NER and compare their performance on a benchmark dataset, with the goal of improving the accuracy and efficiency of NER systems. 
+
+We are utilizing the articles and summaries under the references heading. This is a working introduction and the articles are linked below.
+
+
+## Data Set
+
+https://www.kaggle.com/datasets/finalepoch/medical-ner?select=Corona2.json
+
+
 
 ## Methods
 
@@ -69,3 +78,29 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 ### Conlusion
 
 ## References
+#Rough Draft of References and their summaries:
+Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., & Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-yLinks to an external site.
+
+ 
+
+-This article focuses on biomedical named entity recognition. This is used for text mining of biomedical texts to find different entity mentions and determine their type. This article investigated how to use entity definition for squad-style machine reading comprehension and span-level one-pass methods. This article defined Biomedical named entity recognition as "a fundamental task of biomedical text mining to identify biomedical entity mentions of different types in biomedical text." Meaning that Biomedical NER is used to comb through biomedical texts to identify different mentions and categorize them (from my small understanding of this topic). The article even mentions that the entity type meanings can be represented by its definition, citing an example of the definition of PROTEINAS. This paper wanted to be able to encode these definitions into two different methods, mentioned above. In doing this, the article explains that introducing entity definition information is effective and improved both method types meaning it is useful for deep learning with biomedical NER. They credit this with comparisions to previous models saying that their model can recognize more due to it having more domain knowledge in with the definition information.
+
+Jian Liu, Lei Gao, Sujie Guo, Rui Ding, Xin Huang, Long Ye, Qinghua Meng, Asef Nazari, Dhananjay Thiruvady, A hybrid deep-learning approach for complex biochemical named entity recognition, Knowledge-Based Systems, Volume 221, 2021, 106958,
+ISSN 0950-7051, https://doi.org/10.1016/j.knosys.2021.106958.
+(https://www.sciencedirect.com/science/article/pii/S0950705121002215)
+
+
+- The article immediately states, "NER provides support for text mining in biochemical reactions, including entity relation extraction, attribute extraction, and metabolic response relationship extraction." Showing that NER is used across biochemestry for a variety of reasons and information extraction. The authors go on to define and explain that NER refers to the identification of entities that have a specific meaning in the text. They detail where it was first introduced and detail how it is an important tool in information extraction. Much like the other articles I have read, this one also stated that rule based methods are limited in their ability to carry out recognition tasks since they rely on their rules. This article explains that deep learning methods are becoming more mainstream since the addres some of the shortcomings of supervised machine learning methods and can also alleviate issues that other models might have. This article does state that to train deep learning models, it ususally takes a large number of manually labelled data which can be very hard to do in a majority of fields. This article detailed more about the specifics of deep learning methods for NER which was helpful to read about since this is a fairly new topic for me.
+
+
+https://arxiv.org/pdf/1706.03762.pdf
+
+https://arxiv.org/pdf/1910.10683.pdf
+
+https://arxiv.org/pdf/1810.04805.pdf
+
+https://arxiv.org/abs/1910.11470
+
+https://ojs.aaai.org/index.php/AAAI/article/view/3861
+
+https://arxiv.org/abs/1909.10649
