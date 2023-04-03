@@ -11,11 +11,7 @@ bibliography: references.bib # file contains bibtex for references
 ---
 
 ## Introduction
-Named Entity Recognition (referred to as NER) is this
-
-
-In kernel estimator, weight function is known as kernel function [@efr2008]. Cite this paper [@bro2014principal].
-
+Named Entity Recognition (referred to as NER) referrs to the process of 
 
 ## Methods
 
