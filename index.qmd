@@ -25,6 +25,10 @@ We are utilizing the articles and summaries under the references heading. This i
 https://www.kaggle.com/datasets/finalepoch/medical-ner?select=Corona2.json
 
 
+### Recurrent Neural Network (RNN)
+A Recurrent Neural Network (RNN) is a method of deep learning that uses sequential data or time-series data. They are often used in ordinal problems, where the output is not continues but it is discrete and ordered, and temporal problems, where data is collected over time and the order of the observations is important. These problems include speech recognition, language translation, and natural language processing (nlp). RNNs make use of training data by taking prior inputs and using them to influence current inputs and outputs. Utilizing prior inputs in this way is what creates the RNN’s memory. This is something that distinguishes RNNs from other deep learning methods. RNNs are also distinguished by the sharing of parameters across each layer in the network. A popular type of RNN architecture known as Long Short-Term Memory (LSTM) has been used in named entity recognition. LSTMs have individual units in the hidden layers of a neural network, each of which has three gates. These include an input gate that controls the input information that goes into a memory cell. A forget gate that controls the amount of historical information that passes through from the previous state, and an output gate that controls the amount of information that is passed on to the next step. RNNs allow information to persist across multiple steps which enable the network to capture dependencies and context. The architecture and abilities of RNNs allow it to be a useful tool in NER that has been proven to perform better than previous NER systems
+
+
 ## Transformers and BERT: A Breif Overview
 
 ### Transformers
@@ -117,7 +121,7 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ## References
 #Rough Draft of References and their summaries:
-Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., & Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-yLinks to an external site.
+Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., & Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-y
 
  
 

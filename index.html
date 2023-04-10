@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sara Ericson, Andrew Campbell, Jorge Sanchez">
-<meta name="dcterms.date" content="2023-04-07">
+<meta name="dcterms.date" content="2023-04-09">
 
 <title>Named Entity Recognition using Deep Learning Techniques</title>
 <style>
@@ -147,7 +147,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 7, 2023</p>
+      <p class="date">April 9, 2023</p>
     </div>
   </div>
     
@@ -166,6 +166,10 @@ div.csl-indent {
 <section id="data-set" class="level2">
 <h2 class="anchored" data-anchor-id="data-set">Data Set</h2>
 <p>https://www.kaggle.com/datasets/finalepoch/medical-ner?select=Corona2.json</p>
+<section id="recurrent-neural-network-rnn" class="level3">
+<h3 class="anchored" data-anchor-id="recurrent-neural-network-rnn">Recurrent Neural Network (RNN)</h3>
+<p>A Recurrent Neural Network (RNN) is a method of deep learning that uses sequential data or time-series data. They are often used in ordinal problems, where the output is not continues but it is discrete and ordered, and temporal problems, where data is collected over time and the order of the observations is important. These problems include speech recognition, language translation, and natural language processing (nlp). RNNs make use of training data by taking prior inputs and using them to influence current inputs and outputs. Utilizing prior inputs in this way is what creates the RNN’s memory. This is something that distinguishes RNNs from other deep learning methods. RNNs are also distinguished by the sharing of parameters across each layer in the network. A popular type of RNN architecture known as Long Short-Term Memory (LSTM) has been used in named entity recognition. LSTMs have individual units in the hidden layers of a neural network, each of which has three gates. These include an input gate that controls the input information that goes into a memory cell. A forget gate that controls the amount of historical information that passes through from the previous state, and an output gate that controls the amount of information that is passed on to the next step. RNNs allow information to persist across multiple steps which enable the network to capture dependencies and context. The architecture and abilities of RNNs allow it to be a useful tool in NER that has been proven to perform better than previous NER systems</p>
+</section>
 </section>
 <section id="transformers-and-bert-a-breif-overview" class="level2">
 <h2 class="anchored" data-anchor-id="transformers-and-bert-a-breif-overview">Transformers and BERT: A Breif Overview</h2>
@@ -297,7 +301,7 @@ M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-<p>#Rough Draft of References and their summaries: Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., &amp; Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-yLinks to an external site.</p>
+<p>#Rough Draft of References and their summaries: Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., &amp; Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-y</p>
 <p>-This article focuses on biomedical named entity recognition. This is used for text mining of biomedical texts to find different entity mentions and determine their type. This article investigated how to use entity definition for squad-style machine reading comprehension and span-level one-pass methods. This article defined Biomedical named entity recognition as “a fundamental task of biomedical text mining to identify biomedical entity mentions of different types in biomedical text.” Meaning that Biomedical NER is used to comb through biomedical texts to identify different mentions and categorize them (from my small understanding of this topic). The article even mentions that the entity type meanings can be represented by its definition, citing an example of the definition of PROTEINAS. This paper wanted to be able to encode these definitions into two different methods, mentioned above. In doing this, the article explains that introducing entity definition information is effective and improved both method types meaning it is useful for deep learning with biomedical NER. They credit this with comparisions to previous models saying that their model can recognize more due to it having more domain knowledge in with the definition information.</p>
 <p>Jian Liu, Lei Gao, Sujie Guo, Rui Ding, Xin Huang, Long Ye, Qinghua Meng, Asef Nazari, Dhananjay Thiruvady, A hybrid deep-learning approach for complex biochemical named entity recognition, Knowledge-Based Systems, Volume 221, 2021, 106958, ISSN 0950-7051, https://doi.org/10.1016/j.knosys.2021.106958. (https://www.sciencedirect.com/science/article/pii/S0950705121002215)</p>
 <ul>
