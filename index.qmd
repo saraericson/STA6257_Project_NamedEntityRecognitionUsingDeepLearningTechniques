@@ -120,7 +120,8 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 ### Conlusion
 
 ## References
-#Rough Draft of References and their summaries:
+# Rough Draft of References and their summaries:
+
 Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., & Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-y
 
  
