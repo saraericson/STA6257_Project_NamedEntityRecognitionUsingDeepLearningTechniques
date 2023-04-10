@@ -1,0 +1,160 @@
+---
+title: "NER - Data analysis"
+format:
+  html:
+    embed-resources: true
+---
+
+## Dataset import from Github - Corona2
+
+The data was manually tagged (diseases,pathogens and medication) for training NER system item. It includes the following columns:
+
+- Text (The actual content)
+- Starts (Position on where the label starts)
+- Ends (Position on where the label ends)
+- Labels (The actual label from the text)
+- Categories:
+  - Medical condition names (example: influenza, headache, malaria)
+  - Medicine names (example : aspirin, penicillin, ribavirin, methotrexate)
+  - Pathogens ( example: Corona Virus, Zika Virus, cynobacteria, E. Coli)
+
+## Code Cell
+
+
+
+```{python}
+!pip install -q nbclient
+!pip install -q requests
+!pip install -q pandas
+!pip install -q nbformat
+!pip install -q plotly.express
+```
+
+
+```{python}
+
+import requests
+
+# Define the raw URL of the JSON file on GitHub
+url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
+# Make an HTTP GET request to the raw URL
+response = requests.get(url)
+# Check if the request was successful (status code 200)
+if response.status_code == 200:
+    # Parse the JSON data from the response
+    data = response.json()
+    print(data)
+else:
+    print('Failed to fetch JSON data:', response.status_code)
+
+```
+
+
+Parse json data into dictionary to manipulata data.
+```{python}
+
+training_data = []
+for example in data['examples']:
+  temp_dict = {}
+  temp_dict['text'] = example['content']
+  temp_dict['entities'] = []
+  for annotation in example['annotations']:
+    start = annotation['start']
+    end = annotation['end']
+    label = annotation['tag_name'].upper()
+    temp_dict['entities'].append((start, end, label))
+  training_data.append(temp_dict)
+
+```
+
+
+Convert data from Dictionary to Dataframe
+```{python}
+import pandas as pd
+# Initialize empty lists to store the data for the DataFrame
+texts = []
+starts = []
+ends = []
+labels = []
+
+# Iterate through the training_data to extract individual entity annotations
+for example in training_data:
+    text = example['text']
+    for entity in example['entities']:
+        start, end, label = entity
+        # Append data to the lists
+        texts.append(text)
+        starts.append(start)
+        ends.append(end)
+        labels.append(label)
+
+# Create a DataFrame from the lists
+df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels})
+df.head(5)
+
+```
+
+Data statistics
+```{python}
+
+import plotly.express as px
+
+# Count the occurrences of each label
+label_counts = df['label'].value_counts()
+
+# Create a DataFrame with labels and their respective counts
+df_counts = pd.DataFrame({'label': label_counts.index, 'count': label_counts.values})
+
+# Plot the frequency of each entity label using a bar plot in Plotly
+fig = px.bar(df_counts, x='label', y='count', text='count', color='label',
+             color_discrete_sequence=px.colors.qualitative.Plotly, title='Frequency of Entity Labels')
+
+# Display the counter label inside the bars
+fig.update_traces(textposition='inside')
+
+# Update axis titles
+fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
+
+fig.show()
+
+```
+
+
+
+```{python}
+
+import plotly.express as px
+
+# Get the counts of each unique label
+label_counts = df['label'].value_counts()
+# Plot a pie chart using Plotly
+fig = px.pie(label_counts, values=label_counts.values, names=label_counts.index, title='Proportion of Entity Labels', hole=0.3)
+fig.update_traces(textinfo='percent+label', textfont_size=12)
+fig.show()
+
+```
+
+
+
+```{python}
+
+import plotly.express as px
+
+# Plot a histogram of entity start positions using Plotly
+fig = px.histogram(df, x='start', nbins=30, title='Histogram of Entity Start Positions')
+fig.update_layout(xaxis_title='Entity Start Position', yaxis_title='Frequency')
+fig.show()
+```
+
+
+```{python}
+
+import plotly.express as px
+
+# Create box plots for 'start' and 'end' columns using Plotly
+fig = px.box(df, y=['start', 'end'], points='all', title='Box Plots of Start and End Entity Positions')
+fig.update_layout(yaxis_title='Value', xaxis_title='Column')
+fig.show()
+
+```
+
