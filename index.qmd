@@ -135,6 +135,3 @@ https://arxiv.org/abs/1909.10649
 Devlin, J. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. ArXiv.Org. https://doi.org/10.48550/arXiv.1810.04805 
 
 Vaswani, A. (2017). Attention Is All You Need. ArXiv.Org. https://doi.org/10.48550/arXiv.1706.03762
-
-
-quarto render NER - Data analysis.qmd
