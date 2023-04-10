@@ -82,6 +82,7 @@ $W_n(x)$ is the sum of weights that belongs to all real numbers. Weights
 are positive numbers and small if $X_i$ is far from $x$.
 
 ## Analysis and Results
+
 ### Data and Vizualisation
 A study was conducted to determine how...
 
@@ -120,17 +121,6 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 ### Conlusion
 
 ## References
-# Rough Draft of References and their summaries:
-
-Xiong, Chen, S., Tang, B., Chen, Q., Wang, X., Yan, J., & Zhou, Y. (2021). Improving deep learning method for biomedical named entity recognition by using entity definition information. BMC Bioinformatics, 22(Suppl 1), 600–600. https://doi-org.ezproxy.lib.uwf.edu/10.1186/s12859-021-04236-y
-
-
-Jian Liu, Lei Gao, Sujie Guo, Rui Ding, Xin Huang, Long Ye, Qinghua Meng, Asef Nazari, Dhananjay Thiruvady, A hybrid deep-learning approach for complex biochemical named entity recognition, Knowledge-Based Systems, Volume 221, 2021, 106958,
-ISSN 0950-7051, https://doi.org/10.1016/j.knosys.2021.106958.
-(https://www.sciencedirect.com/science/article/pii/S0950705121002215)
-
-
-https://arxiv.org/pdf/1706.03762.pdf
 
 https://arxiv.org/pdf/1910.10683.pdf
 
@@ -144,5 +134,7 @@ https://arxiv.org/abs/1909.10649
 
 Devlin, J. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. ArXiv.Org. https://doi.org/10.48550/arXiv.1810.04805 
 
-
 Vaswani, A. (2017). Attention Is All You Need. ArXiv.Org. https://doi.org/10.48550/arXiv.1706.03762
+
+
+quarto render NER - Data analysis.qmd
