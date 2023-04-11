@@ -19,6 +19,8 @@ In this research project, we explore various deep learning techniques for NER an
 
 We are utilizing the articles and summaries under the references heading. This is a working introduction and the articles are linked below.
 
+[@xiong2021Improving]
+
 
 ## Data Set
 

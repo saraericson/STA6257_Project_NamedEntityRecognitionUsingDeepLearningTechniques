@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sara Ericson, Andrew Campbell, Jorge Sanchez">
-<meta name="dcterms.date" content="2023-04-10">
+<meta name="dcterms.date" content="2023-04-11">
 
 <title>Named Entity Recognition using Deep Learning Techniques</title>
 <style>
@@ -85,6 +85,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -128,7 +147,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 10, 2023</p>
+      <p class="date">April 11, 2023</p>
     </div>
   </div>
     
@@ -143,6 +162,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>NER is very useful in biomedical text mining. Previous NER methods for biomedical text mining rely on dictionary or rule based methods and machine learning techniques which are time consuming and have been proven to perform worse than deep learning methods. However, accurate deep neural network systems for NER have only recently been developed. Complications of NER occur due to the category of named entities being dependent on the context of the surrounding text and named entities having multiple definitions and evaluation criteria. Neural network (NN) systems are preferential to other machine learning systems because they require less feature engineering, so they are more domain independent. Evaluation of NER performance can be done in different ways. It can be based on type, which is whether the predicted label was correct regardless of entity boundaries, or on text, which is whether the predicted label was correct regardless of label. The precision is the correct predictions divided by the total number of predictions. Recall is the number of entities a system predicted correctly divided by the number that were identified by human annotators. A statistic that is often used when evaluating NER performance is the F-Score which is the harmonic mean of precision and recall from both type and text.</p>
 <p>In this research project, we explore various deep learning techniques for NER and compare their performance on a benchmark dataset, with the goal of improving the accuracy and efficiency of NER systems.</p>
 <p>We are utilizing the articles and summaries under the references heading. This is a working introduction and the articles are linked below.</p>
+<p><span class="citation" data-cites="xiong2021Improving">(<a href="#ref-xiong2021Improving" role="doc-biblioref">Xiong and Zhou 2021</a>)</span></p>
 </section>
 <section id="data-set" class="level2">
 <h2 class="anchored" data-anchor-id="data-set">Data Set</h2>
@@ -289,9 +309,14 @@ M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
 <p>https://arxiv.org/abs/1909.10649</p>
 <p>Devlin, J. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. ArXiv.Org. https://doi.org/10.48550/arXiv.1810.04805</p>
 <p>Vaswani, A. (2017). Attention Is All You Need. ArXiv.Org. https://doi.org/10.48550/arXiv.1706.03762</p>
+
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-xiong2021Improving" class="csl-entry" role="doc-biblioentry">
+Xiong, Chen, Y., and Y. Zhou. 2021. <span>“Improving Deep Learning Method for Biomedical Named Entity Recognition by Using Entity Definition Information.”</span> <em>BMC Bioinformatics</em> 22 (600).
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
