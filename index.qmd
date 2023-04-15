@@ -286,36 +286,6 @@ fig.show()
 
 ***\[Pending\]***
 
-
-## Methods
-
-### Data Set
-
-https://www.kaggle.com/datasets/finalepoch/medical-ner?select=Corona2.json
-
-## Data set description
-The data was manually tagged (diseases,pathogens and medication) for training NER system item. It includes the following columns:
-
-- Text (The actual content)
-- Starts (Position on where the label starts)
-- Ends (Position on where the label ends)
-- Labels (The actual label from the text)
-- Categories:
-  - Medical condition names (example: influenza, headache, malaria)
-  - Medicine names (example : aspirin, penicillin, ribavirin, methotrexate)
-  - Pathogens ( example: Corona Virus, Zika Virus, cynobacteria, E. Coli)
-
-## Code Cell
-
-
-## Analysis and Results
-
-### Data and Vizualisation
-
-### Statistical Modeling
-
-### Conlusion
-
 ## References
 [@xiong2021Improving]
 [@liu2021Hybrid]
