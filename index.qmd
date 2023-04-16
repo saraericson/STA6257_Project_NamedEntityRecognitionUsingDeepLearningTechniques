@@ -230,7 +230,7 @@ fig.update_traces(textposition='inside')
 # Update axis titles
 fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
 
-fig.show()
+#fig.show()
 
 ```
 
@@ -245,7 +245,7 @@ label_counts = df['label'].value_counts()
 # Plot a pie chart using Plotly
 fig = px.pie(label_counts, values=label_counts.values, names=label_counts.index, title='Proportion of Entity Labels', hole=0.3)
 fig.update_traces(textinfo='percent+label', textfont_size=12)
-fig.show()
+#fig.show()
 
 ```
 
@@ -258,7 +258,7 @@ import plotly.express as px
 # Plot a histogram of entity start positions using Plotly
 fig = px.histogram(df, x='start', nbins=30, title='Histogram of Entity Start Positions')
 fig.update_layout(xaxis_title='Entity Start Position', yaxis_title='Frequency')
-fig.show()
+#fig.show()
 ```
 
 4.  The box plot below shows the start and end positions of entity labels, with the majority located below the five hundredth position.
@@ -270,7 +270,7 @@ import plotly.express as px
 # Create box plots for 'start' and 'end' columns using Plotly
 fig = px.box(df, y=['start', 'end'], points='all', title='Box Plots of Start and End Entity Positions')
 fig.update_layout(yaxis_title='Value', xaxis_title='Column')
-fig.show()
+#fig.show()
 
 ```
 
