@@ -36,8 +36,6 @@ computational complexity, necessitating specialized hardware and substantial res
 
 # **2 Methods**
 
-***\[In progress - Pending RNN Method\]***
-
 ## 2.1 RNN
 
 A neural network has three layers. An input layer, a hidden layer, and an output layer. A recurrent neural network (RNN) also has three layers, but with the addition of a recurrent component that takes the output from a previous iteration and includes it in the current iteration. This is what makes RNNs useful for sequential and temporal data. Basic neural networks are optimized using back propagation which involves finding the gradient of a parameter and then using a gradient descent algorithm to find values that minimize a loss function (such as error). 
@@ -286,11 +284,12 @@ df_counts = pd.DataFrame({'label': label_counts.index, 'count': label_counts.val
 fig = px.bar(df_counts, x='label', y='count', text='count', color='label',
              color_discrete_sequence=px.colors.qualitative.Plotly, title='Frequency of Entity Labels')
 
-# Display the counter label inside the bars
-fig.update_traces(textposition='inside')
-
-# Update axis titles
 fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
+
+# Display the counter label inside the bars
+#fig.update_traces(textposition='inside')
+# Update axis titles
+#fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
 
 #fig.show()
 
@@ -346,7 +345,10 @@ fig.update_layout(yaxis_title='Value', xaxis_title='Column')
 
 # **6 Conclusion**
 
-***\[Pending\]***
+***\[This is a working conclusion\]***
+
+Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing. Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques. 
+
 
 ## References
 [@xiong2021Improving]
