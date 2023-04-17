@@ -146,7 +146,7 @@ In this formula, the attention uses queries (Q) and keys (K) to calculate attent
 
 ## 3.1 Dataset Description
 
-I will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens. The dataset was manually tagged for training. I will use the Transformer model to apply the NER using python programming language. The dataset contains 31 observations and 4 attributes properly explained in the data definition.
+We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens. Similarly to the dataset used in [@xiong2021Improving], the dataset was manually tagged for training. We will use the Transformer model and the RNN model to apply the NER using python programming language. The dataset contains 31 observations and 4 attributes properly explained in the data definition.
 
 **Data Definition**
 
