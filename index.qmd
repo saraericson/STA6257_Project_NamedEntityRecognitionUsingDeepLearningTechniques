@@ -40,6 +40,68 @@ computational complexity, necessitating specialized hardware and substantial res
 
 ## 2.1 RNN
 
+A neural network has three layers. An input layer, a hidden layer, and an output layer. A recurrent neural network (RNN) also has three layers, but with the addition of a recurrent component that takes the output from a previous iteration and includes it in the current iteration. This is what makes RNNs useful for sequential and temporal data. Basic neural networks are optimized using back propagation which involves finding the gradient of a parameter and then using a gradient descent algorithm to find values that minimize a loss function (such as error). 
+
+Example of Loss function (Mean Squared Error)\
+\
+ $\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2$\
+ 
+Gradient Descent Algorithm\
+\
+ $\text{𝜽}_j =𝜽_j - 𝛼 (∂J(𝜽) / ∂𝜽_j)$\
+
+N : number of vector entires with yi in output vector
+
+yi : predicted value
+
+yi* : actual value
+
+𝛼 : learning rate
+
+𝜽j : input
+
+This will cause the weight parameters to be updated. When a large amount of data is used this can cause the weights to increase or decrease dramatically creating a problem known as vanishing or exploding gradients. When this occurs the weights will either be extremely close to zero or extremely large, which may be represented by a NaN value. An example when large amounts of data may be used is NER in which the context of previous words and characters is relevant. To mitigate an exploding or vanishing gradient long short-term memory (LSTM) cells may be used within the hidden layer. LSTM cells make use of three gates. An input gate, a forget gate, and an output gate. These gates use a sigmoid function which outputs a value between zero and one. Zero blocks all information and one allows all information through. The input gate determines which information is stored in the cell. The forget gate determines which information will be discarded. The output gate provides the activation for the final output. The sigmoid function is given below along with a general equation for the gates. When using LSTMs the weights and biases are the same among every iteration. This is so the RNN model can be applied to data of varying lengths.[@Cho2019BiomedNER]
+
+Sigmoid\
+\
+ $\text{f(x)} = {1/(1+e^{-x})}$\
+
+General gate equation\
+\
+ $\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)$\
+ 
+x : input
+
+𝝈 : sigmoid function
+
+w : weight
+
+h : information of i-th iteration 
+
+b : bias
+
+LSTMs have a cell state that is the result of the gates and a few other calculations. This state is what provides the cell with its “memory” which is very useful in NER when the memory of what was written or previously said can determine what should come next in a sentence. The other equations used besides sigmoid are shown below.
+
+Possible cell state at i-th iteration\
+\
+ $\text{c}_i^*=tanh(w[h_{i-1}, x_i] + b)$\
+ 
+Cell state\
+\
+ $\text{c}_i = (forget gate * c_{i-1}) + (input gate * c_i^* )$\
+ 
+Output\
+\
+ $\text{h}_i = (output gate * tanh(c_i))$\
+
+tanh\
+\
+ $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\
+ 
+tanh : activation function
+
+These equations determine which information is passed through the cell and the ultimate state of the cell at the present iteration. The type of RNN used in NER is many-to-many RNN. This type of RNN uses each word as an input to build the state (the context) of the model. This is what can be subsequently used in making predictions.
+
 ## 2.2 Transformer Model
 
 The Transformers model has a unique feature called the 'attention mechanism.' It helps the model make intelligent predictions by focusing on essential parts of the input. For example, when predicting the next
