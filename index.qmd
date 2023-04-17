@@ -480,7 +480,7 @@ Lastly the model is fitted and the accuracy is calculated.
 model.fit(X, y, batch_size=32, epochs=10)
 ```
 
-The RNN model can be shown the have an accuracy of 0.9967, which means that it was a very effective model.
+Here the RNN model is shown to be very effective with an accuracy of 0.9967.
 
 # **6 Conclusion**
 
