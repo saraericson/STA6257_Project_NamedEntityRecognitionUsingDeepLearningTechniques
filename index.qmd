@@ -187,28 +187,9 @@ import nbformat
 import plotly.express
 ```
 
-
-```{python}
-url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
-# HTTP GET request to the raw URL
-response = requests.get(url)
-# I am checking if the request was successful (status code 200)
-if response.status_code == 200:
-    # Parse the JSON data from the response
-    data = response.json()
-    print('Success, the Json data was stored into the data variable')
-else:
-    print('Failed to fetch JSON data:', response.status_code)
-```
-
-
 Import the data from Github to local.
 
 ```{python}
-
-import requests
-
-# Accessing the JSON file from GitHub
 url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
 # HTTP GET request to the raw URL
 response = requests.get(url)
@@ -219,8 +200,8 @@ if response.status_code == 200:
     print('Success, the Json data was stored into the data variable')
 else:
     print('Failed to fetch JSON data:', response.status_code)
-
 ```
+
 
 Parse json data into dictionary to manipulate data.
 
