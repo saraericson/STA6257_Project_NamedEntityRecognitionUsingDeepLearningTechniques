@@ -36,9 +36,69 @@ computational complexity, necessitating specialized hardware and substantial res
 
 # **2 Methods**
 
-***\[In progress - Pending RNN Method\]***
-
 ## 2.1 RNN
+
+A neural network has three layers. An input layer, a hidden layer, and an output layer. A recurrent neural network (RNN) also has three layers, but with the addition of a recurrent component that takes the output from a previous iteration and includes it in the current iteration. This is what makes RNNs useful for sequential and temporal data. Basic neural networks are optimized using back propagation which involves finding the gradient of a parameter and then using a gradient descent algorithm to find values that minimize a loss function (such as error). 
+
+Example of Loss function (Mean Squared Error)\
+\
+ $\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2$\
+ 
+Gradient Descent Algorithm\
+\
+ $\text{𝜽}_j =𝜽_j - 𝛼 (∂J(𝜽) / ∂𝜽_j)$\
+
+N : number of vector entires with yi in output vector
+
+yi : predicted value
+
+yi* : actual value
+
+𝛼 : learning rate
+
+𝜽j : input
+
+This will cause the weight parameters to be updated. When a large amount of data is used this can cause the weights to increase or decrease dramatically creating a problem known as vanishing or exploding gradients. When this occurs the weights will either be extremely close to zero or extremely large, which may be represented by a NaN value. An example when large amounts of data may be used is NER in which the context of previous words and characters is relevant. To mitigate an exploding or vanishing gradient long short-term memory (LSTM) cells may be used within the hidden layer. LSTM cells make use of three gates. An input gate, a forget gate, and an output gate. These gates use a sigmoid function which outputs a value between zero and one. Zero blocks all information and one allows all information through. The input gate determines which information is stored in the cell. The forget gate determines which information will be discarded. The output gate provides the activation for the final output. The sigmoid function is given below along with a general equation for the gates. When using LSTMs the weights and biases are the same among every iteration. This is so the RNN model can be applied to data of varying lengths.[@Cho2019BiomedNER]
+
+Sigmoid\
+\
+ $\text{f(x)} = {1/(1+e^{-x})}$\
+
+General gate equation\
+\
+ $\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)$\
+ 
+x : input
+
+𝝈 : sigmoid function
+
+w : weight
+
+h : information of i-th iteration 
+
+b : bias
+
+LSTMs have a cell state that is the result of the gates and a few other calculations. This state is what provides the cell with its “memory” which is very useful in NER when the memory of what was written or previously said can determine what should come next in a sentence. The other equations used besides sigmoid are shown below.
+
+Possible cell state at i-th iteration\
+\
+ $\text{c}_i^*=tanh(w[h_{i-1}, x_i] + b)$\
+ 
+Cell state\
+\
+ $\text{c}_i = (forget gate * c_{i-1}) + (input gate * c_i^* )$\
+ 
+Output\
+\
+ $\text{h}_i = (output gate * tanh(c_i))$\
+
+tanh\
+\
+ $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\
+ 
+tanh : activation function
+
+These equations determine which information is passed through the cell and the ultimate state of the cell at the present iteration. The type of RNN used in NER is many-to-many RNN. This type of RNN uses each word as an input to build the state (the context) of the model. This is what can be subsequently used in making predictions.
 
 ## 2.2 Transformer Model
 
@@ -107,6 +167,20 @@ I will use the dataset called corona2 from Kaggle to identify Natural Entity Rec
 
 ## 3.2 Data Preparation
 
+The following python code will load the required libraries:
+
+
+-  **nbclient** : Executes Jupyter notebooks programmatically
+    
+-  **requests** : Sends HTTP requests and interacts with RESTful APIs in Python
+   
+-  **pandas** : Manipulates and analyzes tabular data using DataFrame and Series
+    
+-  **nbformat** : Reads, writes, and manipulates Jupyter Notebook files
+    
+-   **plotly.express** : Creates interactive data visualizations with a simple interface
+    
+    
 ```{r}
 library(reticulate)
 # do the following ONCE AND COMMENT
@@ -127,28 +201,9 @@ import nbformat
 import plotly.express
 ```
 
-
-```{python}
-url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
-# HTTP GET request to the raw URL
-response = requests.get(url)
-# I am checking if the request was successful (status code 200)
-if response.status_code == 200:
-    # Parse the JSON data from the response
-    data = response.json()
-    print('Success, the Json data was stored into the data variable')
-else:
-    print('Failed to fetch JSON data:', response.status_code)
-```
-
-
 Import the data from Github to local.
 
 ```{python}
-
-import requests
-
-# Accessing the JSON file from GitHub
 url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
 # HTTP GET request to the raw URL
 response = requests.get(url)
@@ -159,8 +214,8 @@ if response.status_code == 200:
     print('Success, the Json data was stored into the data variable')
 else:
     print('Failed to fetch JSON data:', response.status_code)
-
 ```
+
 
 Parse json data into dictionary to manipulate data.
 
@@ -224,11 +279,12 @@ df_counts = pd.DataFrame({'label': label_counts.index, 'count': label_counts.val
 fig = px.bar(df_counts, x='label', y='count', text='count', color='label',
              color_discrete_sequence=px.colors.qualitative.Plotly, title='Frequency of Entity Labels')
 
-# Display the counter label inside the bars
-fig.update_traces(textposition='inside')
-
-# Update axis titles
 fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
+
+# Display the counter label inside the bars
+#fig.update_traces(textposition='inside')
+# Update axis titles
+#fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
 
 #fig.show()
 
@@ -373,7 +429,10 @@ df
 
 # **6 Conclusion**
 
-***\[Pending\]***
+***\[This is a working conclusion\]***
+
+Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing. Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques. 
+
 
 ## References
 [@xiong2021Improving]
