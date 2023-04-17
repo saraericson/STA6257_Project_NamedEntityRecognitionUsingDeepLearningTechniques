@@ -21,7 +21,7 @@ In this literature review, we will explore and compare the effectiveness of RNNs
 
 ## 1.1 Recurrent Neural Networks (RNN)
 
-A Recurrent Neural Network (RNN) is a method of deep learning that uses sequential data or time-series data. They are often used in ordinal problems, where the output is not continues but it is discrete and ordered, and temporal problems, where data is collected over time and the order of the observations is important. These problems include speech recognition, language translation, and natural language processing (nlp). RNNs make use of training data by taking prior inputs and using them to influence current inputs and outputs. Utilizing prior inputs in this way is what creates the RNN's memory. This is something that distinguishes RNNs from other deep learning methods. RNNs are also distinguished by the sharing of parameters across each layer in the network. A popular type of RNN architecture known as Long Short-Term Memory (LSTM) has been used in named entity recognition. LSTMs have individual units in the hidden layers of a neural network, each of which has three gates. These include an input gate that controls the input information that goes into a memory cell. A forget gate that controls the amount of historical information that passes through from the previous state, and an output gate that controls the amount of information that is passed on to the next step. RNNs allow information to persist across multiple steps which enable the network to capture dependencies and context. The architecture and abilities of RNNs allow it to be a useful tool in NER that has been proven to perform better than previous NER systems.
+A Recurrent Neural Network (RNN) is a method of deep learning that uses sequential data or time-series data. They are often used in ordinal problems, where the output is not continues but it is discrete and ordered, and temporal problems, where data is collected over time and the order of the observations is important. These problems include speech recognition, language translation, and natural language processing (nlp). RNNs make use of training data by taking prior inputs and using them to influence current inputs and outputs. Utilizing prior inputs in this way is what creates the RNN's memory. This is something that distinguishes RNNs from other deep learning methods. RNNs are also distinguished by the sharing of parameters across each layer in the network. A popular type of RNN architecture known as Long Short-Term Memory (LSTM) has been used in named entity recognition. LSTMs have individual units in the hidden layers of a neural network, each of which has three gates. These include an input gate that controls the input information that goes into a memory cell. A forget gate that controls the amount of historical information that passes through from the previous state, and an output gate that controls the amount of information that is passed on to the next step. RNNs allow information to persist across multiple steps which enable the network to capture dependencies and context.[@Wu_Jiang_Xu_Zhi_Xu2018ClinicalNER] The architecture and abilities of RNNs allow it to be a useful tool in NER that has been proven to perform better than previous NER systems.
 
 ## 1.2 Transformer Model
 
@@ -425,13 +425,60 @@ df
 
 # **5 Recurrent Neural Networks Results **
 
-***\[Pending\]***
+Load required libraries for the RNN.
+
+```{python}
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.layers import LSTM, Dense, Dropout, TimeDistributed, Bidirectional
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.utils import to_categorical
+```
+
+Using the dataframe created from the transformer model a vocabulary of words and labels was created and then converted into indices.The sequences are then padded to a maximum length and then converted to one-hot encoded vectors. A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0. This is necessary to train the model with tensorflow and recurrent neural networks.  
+```{python}
+words = set(df['text'].values)
+word2idx = {w: i + 2 for i, w in enumerate(words)}
+word2idx['PAD'] = 0
+word2idx['UNK'] = 1
+
+tags = set(df['label'].values)
+tag2idx = {t: i + 1 for i, t in enumerate(tags)}
+tag2idx['PAD'] = 0
+
+X = [[word2idx.get(w, 1) for w in sentence.split()] for sentence in df['text'].values]
+y = [[tag2idx[t] for t in sentence.split()] for sentence in df['label'].values]
+
+maxlen = max(len(x) for x in X)
+X = pad_sequences(X, padding='post', maxlen=maxlen)
+y = pad_sequences(y, padding='post', maxlen=maxlen)
+y = to_categorical(y, num_classes=len(tag2idx))
+```
+
+After the data is manipulated the RNN model is created and compiled with the use of tensorflow.
+```{python}
+model = tf.keras.Sequential([
+    tf.keras.layers.Embedding(len(word2idx), 128),
+    tf.keras.layers.LSTM(128, return_sequences=True),
+    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(len(tag2idx), activation='softmax'))
+])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+```
+
+Lastly the model is fitted and the accuracy is calculated. 
+```{python}
+model.fit(X, y, batch_size=32, epochs=10)
+```
+
+The RNN model can be shown the have an accuracy of 0.9967, which means that it was a very effective model.
 
 # **6 Conclusion**
 
 ***\[This is a working conclusion\]***
 
-Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing. Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques. 
+Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing. Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. In the NLP problem in this paper it can be seen that the RNN model has a higher accuracy than the transformer model, so the RNN model would be preferred. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques. 
 
 
 ## References
@@ -445,3 +492,5 @@ Named Entity Recognition (NER) is a key NLP task that involves identifying named
 [@yadav2019survey]
 [@Zhao_Liu_Zhao_Wang_2019]
 [@souza2020portuguese]
+[@Cho2019BiomedNER]
+[@Wu_Jiang_Xu_Zhi_Xu2018ClinicalNER]
