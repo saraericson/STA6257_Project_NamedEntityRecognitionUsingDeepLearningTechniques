@@ -436,7 +436,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 ```
 
-Using the dataframe created from the transformer model a vocabulary of words and labels was created and then converted into indices.The sequences are then padded to a maximum length and then converted to one-hot encoded vectors. A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0. This is necessary to train the model with tensorflow and recurrent neural networks.  
+Using the dataframe created from the transformer model a vocabulary of words and labels was created and then converted into indices. The sequences are then padded to a maximum length and then converted to one-hot encoded vectors. A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0. This is necessary to train the model with tensorflow and recurrent neural networks.  
 ```{python}
 words = set(df['text'].values)
 word2idx = {w: i + 2 for i, w in enumerate(words)}
