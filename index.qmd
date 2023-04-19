@@ -21,7 +21,7 @@ In this literature review, we will explore and compare the effectiveness of RNNs
 
 ## 1.1 Recurrent Neural Networks (RNN)
 
-A Recurrent Neural Network (RNN) is a method of deep learning that uses sequential data or time-series data. They are often used in ordinal problems, where the output is not continues but it is discrete and ordered, and temporal problems, where data is collected over time and the order of the observations is important. These problems include speech recognition, language translation, and natural language processing (nlp). RNNs make use of training data by taking prior inputs and using them to influence current inputs and outputs. Utilizing prior inputs in this way is what creates the RNN's memory. This is something that distinguishes RNNs from other deep learning methods. RNNs are also distinguished by the sharing of parameters across each layer in the network. A popular type of RNN architecture known as Long Short-Term Memory (LSTM) has been used in named entity recognition. LSTMs have individual units in the hidden layers of a neural network, each of which has three gates. These include an input gate that controls the input information that goes into a memory cell. A forget gate that controls the amount of historical information that passes through from the previous state, and an output gate that controls the amount of information that is passed on to the next step. RNNs allow information to persist across multiple steps which enable the network to capture dependencies and context.[@Wu_Jiang_Xu_Zhi_Xu2018ClinicalNER] The architecture and abilities of RNNs allow it to be a useful tool in NER that has been proven to perform better than previous NER systems.
+A Recurrent Neural Network (RNN) is a method of deep learning that is useful for sequential data and time-series data. RNNs are often used in ordinal problems, where the output is discrete and ordered, as well as temporal problems, in which the time that data is collected is important. These problems include speech recognition, language translation, and natural language processing (NLP). RNNs are similar to other neural networks, but they have some distinct differences. Other neural network models can be used for medical text mining, however, RNNs have been shown to be one of the most effective models. This model has some drawbacks, but they can be mitigated with the use of Long Short-Term Memory (LSTM) cells in the hidden layers of the neural network [@Wu_Jiang_Xu_Zhi_Xu2018ClinicalNER]. RNNs have the ability to allow information to persist across multiple steps which enables the network to capture dependencies and context. This is a feature that makes it ideal for NER in which the context is very important. The specifics of a recurrent neural network will be discussed later
 
 ## 1.2 Transformer Model
 
@@ -330,6 +330,7 @@ fig.update_layout(yaxis_title='Value', xaxis_title='Column')
 
 ```
 
+
 # **4 Transformer Model Results**
 
 ***\[Pending\]***
@@ -421,9 +422,16 @@ for example in training_data:
 df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels})
 df
 ```
+The Transformer model needed to be deployed in a Google Colab Repo because our computers did not have the power to train the transformer model when running out of a CPU. We get the following results which are good besides the eval_loss with over 31%. The hyperparameters were modified by increasing the epochs from 3 to 5 and 5 to 10, but the loss decreased to 25%. Precision and accuracy did not improve. The best approach to reduce the loss is to get more data. We could not find the more annotated dataset for NER in health. In Google Colab, a Hardware accelerator (GPU) was used to increase the training speed, and it worked. The link for further review is provided [Google Colab Code](https://colab.research.google.com/drive/1qKpXd2sP-Iesi76W-232hVUPkl9zvl5s?usp=sharing)
 
+{'eval_loss': 0.3150147497653961, 'eval_precision': 0.9375, 'eval_recall': 1.0, 'eval_f1': 0.967741935483871, 'eval_accuracy': 0.9375, 'eval_runtime': 9.0895, 'eval_samples_per_second': 0.77, 'eval_steps_per_second': 0.11, 'epoch': 3.0}
 
 # **5 Recurrent Neural Networks Results **
+```{r}
+py_install("tensorflow")
+
+```
+
 
 Load required libraries for the RNN.
 
