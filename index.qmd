@@ -427,10 +427,6 @@ The Transformer model needed to be deployed in a Google Colab Repo because our c
 {'eval_loss': 0.3150147497653961, 'eval_precision': 0.9375, 'eval_recall': 1.0, 'eval_f1': 0.967741935483871, 'eval_accuracy': 0.9375, 'eval_runtime': 9.0895, 'eval_samples_per_second': 0.77, 'eval_steps_per_second': 0.11, 'epoch': 3.0}
 
 # **5 Recurrent Neural Networks Results **
-```{r}
-py_install("tensorflow")
-
-```
 
 
 Load required libraries for the RNN.
