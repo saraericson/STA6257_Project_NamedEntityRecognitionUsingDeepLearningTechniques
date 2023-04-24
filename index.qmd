@@ -13,7 +13,7 @@ bibliography: references.bib # file contains bibtex for references
 
 # 1. Introduction
 
-Named Entity Recognition (NER) is a crucial task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text. NER presents challenges due to the inherent complexity and ambiguity of natural language. Still, it is essential for various NLP applications, including information retrieval, question answering, and machine translation. Biomedical NER is the task of text mining to specificly biomedical texts to determin entity types [@xiong2021Improving]. Simarly, medical NER tasks usually find the boundaries of mentions from medical texts [@zhao_liu_zhao_wang_2019]. Deep learning techniques have demonstrated exceptional performance in NER tasks in recent years. Deep learning, a subfield of machine learning, uses artificial neural networks to learn from data and make predictions. 
+Named Entity Recognition (NER) is a crucial task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text. NER presents challenges due to the inherent complexity and ambiguity of natural language. Still, it is essential for various NLP applications, including information retrieval, question answering, and machine translation. Biomedical NER is the task of text mining to specifically biomedical texts to determine entity types [@xiong2021Improving]. Similarly, medical NER tasks usually find the boundaries of mentions from medical texts [@Zhao_Liu_Zhao_Wang_2019]. Deep learning techniques have demonstrated exceptional performance in NER tasks in recent years. Deep learning, a subfield of machine learning, uses artificial neural networks to learn from data and make predictions. 
 
 The Transformer model, introduced in 2017, has become a fundamental architecture in modern NLP and is widely used for NER tasks. It is known for its self-attention mechanism, which allows the model to weigh the importance of each word in the input sequence. Additionally, other deep learning architectures such as Recurrent Neural Networks (RNNs), Convolutional Neural Networks (CNNs), and Bidirectional Encoder Representations from Transformers (BERT) have been successfully applied to NER.
 
@@ -31,7 +31,7 @@ The Transformer model is a groundbreaking neural network architecture introduced
 
 ***\[In progress - Pending RNN Method\]***
 
-A major limitation of current techniques is that the standard language models are unidirectional, and thus limit the choice of architecture that can be used for pre-training [@delvin2019bert].
+A major limitation of current techniques is that the standard language models are unidirectional, and thus limit the choice of architecture that can be used for pre-training [@devlin2019bert].
 
 
 Transformers are powerful neural network models commonly used in natural language processing tasks. However, they face two fundamental limitations: First, their large number of parameters results in high
