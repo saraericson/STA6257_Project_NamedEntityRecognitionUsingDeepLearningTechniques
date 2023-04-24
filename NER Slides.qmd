@@ -678,7 +678,7 @@ model.fit(X, y, batch_size=32, epochs=10)
 ```
 
 ```{python}
-model.fit(X, y, batch_size=32, epochs=10)
+model.fit(X, y, batch_size=32, epochs=10, verbose=2)
 ```
 
 # Conclusion
