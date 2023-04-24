@@ -13,7 +13,7 @@ bibliography: references.bib # file contains bibtex for references
 
 # 1. Introduction
 
-Named Entity Recognition (NER) is a crucial task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text. NER presents challenges due to the inherent complexity and ambiguity of natural language. Still, it is essential for various NLP applications, including information retrieval, question answering, and machine translation. Deep learning techniques have demonstrated exceptional performance in NER tasks in recent years. Deep learning, a subfield of machine learning, uses artificial neural networks to learn from data and make predictions.
+Named Entity Recognition (NER) is a crucial task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text. NER presents challenges due to the inherent complexity and ambiguity of natural language. Still, it is essential for various NLP applications, including information retrieval, question answering, and machine translation. Biomedical NER is the task of text mining to specificly biomedical texts to determin entity types [@xiong2021Improving]. Simarly, medical NER tasks usually find the boundaries of mentions from medical texts [@zhao_liu_zhao_wang_2019]. Deep learning techniques have demonstrated exceptional performance in NER tasks in recent years. Deep learning, a subfield of machine learning, uses artificial neural networks to learn from data and make predictions. 
 
 The Transformer model, introduced in 2017, has become a fundamental architecture in modern NLP and is widely used for NER tasks. It is known for its self-attention mechanism, which allows the model to weigh the importance of each word in the input sequence. Additionally, other deep learning architectures such as Recurrent Neural Networks (RNNs), Convolutional Neural Networks (CNNs), and Bidirectional Encoder Representations from Transformers (BERT) have been successfully applied to NER.
 
@@ -30,6 +30,9 @@ The Transformer model is a groundbreaking neural network architecture introduced
 ## 1.3 Limitations
 
 ***\[In progress - Pending RNN Method\]***
+
+A major limitation of current techniques is that the standard language models are unidirectional, and thus limit the choice of architecture that can be used for pre-training [@delvin2019bert].
+
 
 Transformers are powerful neural network models commonly used in natural language processing tasks. However, they face two fundamental limitations: First, their large number of parameters results in high
 computational complexity, necessitating specialized hardware and substantial resources, especially for deep models with long input sequences. Second, transformers exhibit quadratic time complexity concerning input length due to the self-attention mechanism, which calculates attention scores between all token pairs. This quadratic complexity limits transformers' ability to handle very long sequences efficiently. Researchers actively explore methods to mitigate these limitations and improve the scalability of transformers.[@keles2022computational]
@@ -429,7 +432,6 @@ The Transformer model needed to be deployed in a Google Colab Repo because our c
 # **5 Recurrent Neural Networks Results **
 ```{r}
 py_install("tensorflow")
-
 ```
 
 
@@ -486,19 +488,9 @@ The RNN model can be shown the have an accuracy of 0.9967, which means that it w
 
 ***\[This is a working conclusion\]***
 
-Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing. Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. In the NLP problem in this paper it can be seen that the RNN model has a higher accuracy than the transformer model, so the RNN model would be preferred. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques. 
+Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. With advances in deep learning and large availability of computational resources, methods based on deep learning have demonstrated obvious advantages over traditional methods and have become mainstream in the NER field [@liu2021Hybrid]. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are clearly effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing. Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. In the NLP problem in this paper it can be seen that the RNN model has a higher accuracy than the transformer model, so the RNN model would be the preferred method to use in NER practices. This conclusion coicides with [@yadav2019survey], who agreed that neural network models generally outperform feature-engineered models. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques. 
 
 
 ## References
-[@xiong2021Improving]
-[@liu2021Hybrid]
-[@phuong2022formal]
-[@keles2022computational]
-[@vaswani2017attention]
-[@devlin2019bert]
 [@raffel2020exploring]
-[@yadav2019survey]
-[@Zhao_Liu_Zhao_Wang_2019]
 [@souza2020portuguese]
-[@Cho2019BiomedNER]
-[@Wu_Jiang_Xu_Zhi_Xu2018ClinicalNER]
