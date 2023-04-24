@@ -29,8 +29,6 @@ The Transformer model is a groundbreaking neural network architecture introduced
 
 ## 1.3 Limitations
 
-***\[In progress - Pending RNN Method\]***
-
 A major limitation of current techniques is that the standard language models are unidirectional, and thus limit the choice of architecture that can be used for pre-training [@devlin2019bert].
 
 
