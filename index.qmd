@@ -13,7 +13,7 @@ bibliography: references.bib # file contains bibtex for references
 ## Slides
 [Presentation](NER%20Slides.html "See presentation"){target="_blank"}
 
-# 1. Introduction
+# 1. Introduction 
 
 Named Entity Recognition (NER) is a crucial task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text. NER presents challenges due to the inherent complexity and ambiguity of natural language. Still, it is essential for various NLP applications, including information retrieval, question answering, and machine translation. Biomedical NER is the task of text mining to specifically biomedical texts to determine entity types [@xiong2021Improving]. Similarly, medical NER tasks usually find the boundaries of mentions from medical texts [@Zhao_Liu_Zhao_Wang_2019]. Deep learning techniques have demonstrated exceptional performance in NER tasks in recent years. Deep learning, a subfield of machine learning, uses artificial neural networks to learn from data and make predictions. 
 
