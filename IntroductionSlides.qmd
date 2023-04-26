@@ -1,0 +1,48 @@
+---
+title: "NER using RNN's and Transformer Model"
+author: "Andrew Campbell, Sara Ericson, and Jorge Sanchez"
+format: revealjs
+editor: visual
+---
+
+## NER, what is it?
+
+::: incremental
+-   Named Entity Recognition (NER) is a task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text.
+    -   This means identifying and classifying entities into categories that are predefined (person, place, etc.)
+-   Biomedical NER is the task of text mining to specifically biomedical texts to determine entity types.
+-   Similarly, medical NER tasks mine specifically medical texts for entity types.
+:::
+
+## Purpose of this review
+
+::: incremental
+-   We are testing different deep learning techniques and their effectiveness of NER on data containing information on Medical Conditions, Medicine Names, and Pathogens.
+
+-   The methods we chose are:
+
+    -   Recurrent Neural Network (RNN): a method of deep learning that is used for sequential data and time-series data.
+    -   Transformer Model: a model designed for sequence-to-sequence tasks, such as machine translation, and is known for its ability to process input sequences in parallel rather than sequentially.
+:::
+
+## Limitations
+
+::: incremental
+-   Current NER techniques have major limitations being that the standard language models are unidirectional, operating in a single direction, and thus limit the choice of architecture that can be used for pre-training.
+-   While the deep learning techniques we have chosen are not perfect, they do directly address this major limitation and we will show their effectiveness moving forward.
+-   Limitations of our chosen techniques:
+    -   Transformer Model: The size of the training data can be a limitation here. If there is not enough training data it can make the model less effective.
+    -   RNN: RNN's are prone to overfitting which is especially true when there is a small dataset.
+:::
+
+## Conclusion
+
+::: incremental
+-   NER is a key NLP task that involves identifying named entities in a text.
+-   Deep learning techniques have become more mainstream in the NER field due to their major advantages.
+-   The techniques we have chose, RNN and Transformer Model, have shown this to be true for various situations.
+-   The accuracies of our models were:
+    -   Transformer Model: 0.9375
+    -   RNN: 0.9967
+-   This shows that when doing NER for our chosen dataset, RNN was more effective after training, but that both are over 90% accurate given the data that we have used.
+:::
