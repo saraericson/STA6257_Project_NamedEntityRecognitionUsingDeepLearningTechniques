@@ -12,7 +12,7 @@ bibliography: references.bib # file contains bibtex for references
 
 ## Slides
 
-[Slides](NER_Slides.html)
+[Slides](IntroductionSlides.html)
 
 # 1. Introduction
 
