@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="NER_Slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="NER_Slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="NER_Slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="NER_Slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="NER_Slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="NER_Slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="NER_Slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.2.269">
+
+  <meta name="author" content="Sara Ericson, Andrew Campbell, Jorge Sanchez">
+  <title>NER using RNNs and Transformer Models</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="NER_Slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="NER_Slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+  <link rel="stylesheet" href="NER_Slides_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link href="NER_Slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="NER_Slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="NER_Slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="NER_Slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">NER using RNNs and Transformer Models</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Sara Ericson, Andrew Campbell, Jorge Sanchez 
+</div>
+</div>
+</div>
+
+  <p class="date">4/25/23</p>
+</section>
+<section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>1. Introduction</h1>
+<p>Named Entity Recognition (NER) is a crucial task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text. NER presents challenges due to the inherent complexity and ambiguity of natural language. Still, it is essential for various NLP applications, including information retrieval, question answering, and machine translation. Biomedical NER is the task of text mining to specificly biomedical texts to determin entity types [@xiong2021Improving].</p>
+</section>
+<section id="intro-continued" class="slide level2">
+<h2>Intro Continued</h2>
+<p>Similarly, medical NER tasks usually find the boundaries of mentions from medical texts [@zhao_liu_zhao_wang_2019]. Deep learning techniques have demonstrated exceptional performance in NER tasks in recent years. Deep learning, a subfield of machine learning, uses artificial neural networks to learn from data and make predictions.</p>
+</section>
+<section id="intro-continued-1" class="slide level2">
+<h2>Intro Continued</h2>
+<p>The Transformer model, introduced in 2017, has become a fundamental architecture in modern NLP and is widely used for NER tasks. It is known for its self-attention mechanism, which allows the model to weigh the importance of each word in the input sequence. Additionally, other deep learning architectures such as Recurrent Neural Networks (RNNs), Convolutional Neural Networks (CNNs), and Bidirectional Encoder Representations from Transformers (BERT) have been successfully applied to NER.</p>
+<p>In this literature review, we will explore and compare the effectiveness of RNNs and the Transformer model for Named Entity Recognition (NER) tasks.</p>
+</section>
+<section id="recurrent-neural-networks-rnn" class="slide level2">
+<h2>1.1 Recurrent Neural Networks (RNN)</h2>
+<p>A Recurrent Neural Network (RNN) is a method of deep learning that is useful for sequential data and time-series data. RNNs are often used in ordinal problems, where the output is discrete and ordered, as well as temporal problems, in which the time that data is collected is important. These problems include speech recognition, language translation, and natural language processing (NLP). RNNs are similar to other neural networks, but they have some distinct differences. Other neural network models can be used for medical text mining, however, RNNs have been shown to be one of the most effective models.</p>
+</section>
+<section id="rnn-continued" class="slide level2">
+<h2>RNN Continued</h2>
+<p>This model has some drawbacks, but they can be mitigated with the use of Long Short-Term Memory (LSTM) cells in the hidden layers of the neural network [@Wu_Jiang_Xu_Zhi_Xu2018ClinicalNER]. RNNs have the ability to allow information to persist across multiple steps which enables the network to capture dependencies and context. This is a feature that makes it ideal for NER in which the context is very important. The specifics of a recurrent neural network will be discussed later.</p>
+</section>
+<section id="transformer-model" class="slide level2">
+<h2>1.2 Transformer Model</h2>
+<p>The Transformer model is a groundbreaking neural network architecture introduced in the paper “Attention Is All You Need” [@vaswani2017attention]. The model is designed for sequence-to-sequence tasks, such as machine translation, and is known for its ability to process input sequences in parallel rather than sequentially. This parallel processing makes the Transformer model highly efficient and scalable. One of the key innovations of the Transformer model is the self-attention mechanism. Self-attention allows the model to weigh the importance of different words in the input sequence relative to each other when making predictions.</p>
+</section>
+<section id="transformer-model-continued" class="slide level2">
+<h2>Transformer Model Continued</h2>
+<p>The model uses multi-head attention, which means it can simultaneously attend to various input aspects. This ability to capture complex dependencies and relationships between words contributes to the model’s strong performance. The Transformer architecture consists of an encoder and decoder, each composed of multiple layers of self-attention and feed forward neural networks.</p>
+</section>
+<section id="transformer-model-continued-1" class="slide level2">
+<h2>Transformer Model Continued</h2>
+<p>The encoder processes the input sequence while the decoder generates the output sequence. The connections between the encoder and decoder are facilitated by attention mechanisms that allow the decoder to focus on different parts of the input sequence as it generates the output. Given its effectiveness and efficiency in handling sequence data, the Transformer model has become the foundation for many subsequent natural language processing (NLP) models and architectures.</p>
+</section>
+<section id="limitations" class="slide level2">
+<h2>1.3 Limitations</h2>
+<p>A major limitation of current techniques is that the standard language models are unidirectional, and thus limit the choice of architecture that can be used for pre-training [@delvin2019bert].</p>
+<p>Transformers are powerful neural network models commonly used in natural language processing tasks. However, they face two fundamental limitations: First, their large number of parameters results in high computational complexity, necessitating specialized hardware and substantial resources, especially for deep models with long input sequences.</p>
+</section>
+<section id="limitations-continued" class="slide level2">
+<h2>Limitations Continued</h2>
+<p>Second, transformers exhibit quadratic time complexity concerning input length due to the self-attention mechanism, which calculates attention scores between all token pairs. This quadratic complexity limits transformers’ ability to handle very long sequences efficiently. Researchers actively explore methods to mitigate these limitations and improve the scalability of transformers.[@keles2022computational]</p>
+</section></section>
+<section>
+<section id="methods" class="title-slide slide level1 center">
+<h1>2. Methods</h1>
+
+</section>
+<section id="rnn" class="slide level2">
+<h2>2.1 RNN</h2>
+<p>A neural network has three layers. An input layer, a hidden layer, and an output layer. A recurrent neural network (RNN) also has three layers, but with the addition of a recurrent component that takes the output from a previous iteration and includes it in the current iteration. This is what makes RNNs useful for sequential and temporal data. Basic neural networks are optimized using back propagation which involves finding the gradient of a parameter and then using a gradient descent algorithm to find values that minimize a loss function (such as error).</p>
+</section>
+<section id="rnn-equations" class="slide level2">
+<h2>RNN Equations</h2>
+<p>Example of Loss function (Mean Squared Error)<br>
+<span class="math inline">\(\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2\)</span><br>
+<br>
+Gradient Descent Algorithm<br>
+<span class="math inline">\(\text{𝜽}_j =𝜽_j - 𝛼 (∂J(𝜽) / ∂𝜽_j)\)</span><br>
+</p>
+<p>N : number of vector entires with yi in output vector</p>
+<p>yi : predicted value</p>
+<p>yi* : actual value</p>
+<p>𝛼 : learning rate</p>
+<p>𝜽j : input</p>
+</section>
+<section id="rnn-continued-1" class="slide level2">
+<h2>RNN Continued</h2>
+<p>Minimizing the loss will lead to the weight parameters being updated. When a large amount of data is used this process can cause the weights to increase or decrease dramatically creating a problem known as vanishing or exploding gradients. When this occurs the weights will either be extremely close to zero or extremely large, which may be represented by a NaN value. An example when large amounts of data may be used is NER in which the context of previous words and characters is relevant. To mitigate an exploding or vanishing gradient long short-term memory (LSTM) cells may be used within the hidden layer.</p>
+</section>
+<section id="lstm-in-rnn" class="slide level2">
+<h2>LSTM in RNN</h2>
+<p>LSTM cells make use of three gates. An input gate, a forget gate, and an output gate. These gates use a sigmoid function which outputs a value between zero and one. Zero blocks all information and one allows all information through. The input gate determines which information is stored in the cell. The forget gate determines which information will be discarded. The output gate provides the activation for the final output. The sigmoid function is given below along with a general equation for the gates. When using LSTMs the weights and biases are the same among every iteration. This is so the RNN model can be applied to data of varying lengths.<span class="citation" data-cites="Cho2019BiomedNER">(<a href="#/references" role="doc-biblioref" onclick="">Cho and Lee 2019</a>)</span></p>
+</section>
+<section id="lstm-equations" class="slide level2">
+<h2>LSTM Equations</h2>
+<p>Sigmoid<br>
+<span class="math inline">\(\text{f(x)} = {1/(1+e^{-x})}\)</span><br>
+</p>
+<p>General gate equation<br>
+<span class="math inline">\(\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)\)</span><br>
+</p>
+<p>x : input</p>
+<p>𝝈 : sigmoid function</p>
+<p>w : weight</p>
+<p>h : information of i-th iteration</p>
+<p>b : bias</p>
+</section>
+<section id="rnn-continued-2" class="slide level2">
+<h2>RNN Continued</h2>
+<p>LSTMs have a cell state that is the result of the gates and a few other calculations. This state is what provides the cell with its “memory” which is very useful in NER when the memory of what was written or previously said can determine what should come next in a sentence. The other equations used besides sigmoid are shown below.</p>
+</section>
+<section id="more-lstm-equations" class="slide level2">
+<h2>More LSTM Equations</h2>
+<p>Possible cell state at i-th iteration:<br>
+<span class="math inline">\(\text{c}_i^*=tanh(w[h_{i-1}, x_i] + b)\)</span><br>
+<br>
+Cell state:<br>
+<span class="math inline">\(\text{c}_i = (forget gate * c_{i-1}) + (input gate * c_i^* )\)</span><br>
+<br>
+Output:<br>
+<span class="math inline">\(\text{h}_i = (output gate * tanh(c_i))\)</span><br>
+<br>
+tanh:<br>
+<span class="math inline">\(\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})\)</span><br>
+<br>
+</p>
+</section>
+<section id="rnn-continued-3" class="slide level2">
+<h2>RNN Continued</h2>
+<p>These equations determine which information is passed through the cell and the ultimate state of the cell at the present iteration. The type of RNN used in NER is many-to-many RNN. This type of RNN uses each word as an input to build the state (the context) of the model. This is what can be subsequently used in making predictions.</p>
+</section>
+<section id="transformer-model-1" class="slide level2">
+<h2>2.2 Transformer Model</h2>
+<p>The Transformers model has a unique feature called the ‘attention mechanism.’ It helps the model make intelligent predictions by focusing on essential parts of the input. For example, when predicting the next word in ‘I have a pet ___,’ the attention mechanism considers the context (the word ‘pet’) to make a better guess, like ‘dog’ or ‘cat.’ It’s like the model knows which words deserve extra attention! ! Let’s look at the two most important algorithms for the attention mechanism, Scaled Dot-Product Attention formula, and the Single (Masked) Self- or Cross-Attention Head Formula <span class="citation" data-cites="phuong2022formal">(<a href="#/references" role="doc-biblioref" onclick="">Phuong and Hutter 2022</a>)</span>.</p>
+</section>
+<section id="transformer-equation" class="slide level2">
+<h2>Transformer Equation</h2>
+<ol type="1">
+<li><p>Scaled Dot-Product Attention formula<br>
+<br>
+<span class="math inline">\(\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V\)</span><br>
+</p>
+<p><strong>Key Components:</strong></p>
+<ul>
+<li><p>Q: Query matrix (requests for information).</p></li>
+<li><p>K: Key matrix (used to calculate relevance).</p></li>
+<li><p>V: Value matrix (actual content to retrieve).</p></li>
+<li><p>d_k: Dimension of the query/key vectors.</p></li>
+<li><p>Softmax (...): Function to normalize attention scores.</p></li>
+</ul></li>
+</ol>
+</section>
+<section id="transformer-continued" class="slide level2">
+<h2>Transformer Continued</h2>
+<p>In this formula, the attention mechanism allows a model to “pay attention” to specific parts of input data. The attention scores are calculated using queries (Q) and keys (K). The scores are normalized using Softmax , producing attention weights. The output is a weighted sum of value vectors (V), where the weights represent the importance of each value for each query. This mechanism is popular in tasks like machine translation to focus on relevant words.</p>
+</section>
+<section id="transformer-equation-1" class="slide level2">
+<h2>Transformer Equation</h2>
+<ol start="2" type="1">
+<li>The Single (Masked) Self- or Cross-Attention Head Formula <span class="math inline">\(\begin{align*}\text{Attention}(Q, K, V) &amp;= \text{softmax}\left(\frac{QK^\top + \text{Mask}}{\sqrt{d_k}}\right)V \\\end{align*}\)</span></li>
+</ol>
+</section>
+<section id="transformer-equation-continued" class="slide level2">
+<h2>Transformer Equation Continued</h2>
+<p><strong>Key Components:</strong></p>
+<ul>
+<li><p>Q: Query matrix (requests for information).</p></li>
+<li><p>K: Key matrix (used to calculate relevance).</p></li>
+<li><p>V: Value matrix (actual content to retrieve).</p></li>
+<li><p>d_k: Dimension of the query/key vectors.</p></li>
+<li><p>Mask: Matrix to prevent attention to specific tokens (e.g., future tokens).</p></li>
+<li><p>Softmax (...): Function to normalize attention scores.</p></li>
+</ul>
+</section>
+<section id="transformer-continued-1" class="slide level2">
+<h2>Transformer Continued</h2>
+<p>In this formula, the attention uses queries (Q) and keys (K) to calculate attention scores. An optional mask (Mask) is added to scores to prevent attending to specific tokens (e.g., in language modeling, future tokens are masked). Scores are normalized using Softmax, producing attention weights. The output is a weighted sum of value vectors (V), representing the importance of each value for each query. Masking is useful for sequence-to-sequence tasks and autoregressive models.</p>
+</section></section>
+<section>
+<section id="data-analysis-and-results" class="title-slide slide level1 center">
+<h1>3. Data Analysis and Results</h1>
+
+</section>
+<section id="dataset-description" class="slide level2">
+<h2>3.1 Dataset Description</h2>
+<p>We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens. Similarly to the dataset used in <span class="citation" data-cites="xiong2021Improving">(<a href="#/references" role="doc-biblioref" onclick="">Xiong and Zhou 2021</a>)</span>, the dataset was manually tagged for training. We will use the Transformer model and the RNN model to apply the NER using python programming language. The dataset contains 31 observations and 4 attributes properly explained in the data definition.</p>
+</section>
+<section id="data-definition" class="slide level2">
+<h2>Data Definition</h2>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Text</td>
+<td>string</td>
+<td>Sentence including the labels</td>
+</tr>
+<tr class="even">
+<td>Starts</td>
+<td>integer</td>
+<td>Position on where the label starts</td>
+</tr>
+<tr class="odd">
+<td>Ends</td>
+<td>integer</td>
+<td>Position on where the label ends</td>
+</tr>
+<tr class="even">
+<td>Labels</td>
+<td>string</td>
+<td>The label( Medical Condition, Medicine or Pathogen)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data-labels" class="slide level2">
+<h2>Data Labels</h2>
+<ul>
+<li>Labels:
+<ul>
+<li>Medical condition names (example: influenza, headache, malaria)</li>
+<li>Medicine names (example : aspirin, penicillin, ribavirin, methotrexate)</li>
+<li>Pathogens ( example: Corona Virus, Zika Virus, cynobacteria, E. Coli)</li>
+</ul></li>
+</ul>
+</section>
+<section id="data-preparation" class="slide level2">
+<h2>3.2 Data Preparation</h2>
+<p>The following python code will load the required libraries:</p>
+<ul>
+<li><p><strong>nbclient</strong> : Executes Jupyter notebooks programmatically</p></li>
+<li><p><strong>requests</strong> : Sends HTTP requests and interacts with RESTful APIs in Python</p></li>
+<li><p><strong>pandas</strong> : Manipulates and analyzes tabular data using DataFrame and Series</p></li>
+<li><p><strong>nbformat</strong> : Reads, writes, and manipulates Jupyter Notebook files</p></li>
+<li><p><strong>plotly.express</strong> : Creates interactive data visualizations with a simple interface</p></li>
+</ul>
+</section>
+<section id="code-for-analysis" class="slide level2">
+<h2>Code for analysis</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># do the following ONCE AND COMMENT</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">py_install</span>(<span class="st">"nbclient"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">py_install</span>(<span class="st">"requests"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">py_install</span>(<span class="st">"pandas"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">py_install</span>(<span class="st">"nbformat"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">py_install</span>(<span class="st">"plotly"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> pandas</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> nbclient</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">import</span> requests</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> nbformat</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">import</span> plotly.express</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+
+</div>
+</section>
+<section id="import-the-data-from-github-to-local." class="slide level2">
+<h2>Import the data from Github to local.</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>url <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># HTTP GET request to the raw URL</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>response <span class="op">=</span> requests.get(url)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># I am checking if the request was successful (status code 200)</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="cf">if</span> response.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="co"># Parse the JSON data from the response</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    data <span class="op">=</span> response.json()</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="bu">print</span>(<span class="st">'Success, the Json data was stored into the data variable'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="cf">else</span>:</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="bu">print</span>(<span class="st">'Failed to fetch JSON data:'</span>, response.status_code)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Success, the Json data was stored into the data variable</code></pre>
+</div>
+</div>
+</section>
+<section id="parse-json-data-into-dictionary-to-manipulate-data." class="slide level2">
+<h2>Parse json data into dictionary to manipulate data.</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>training_data <span class="op">=</span> []</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="cf">for</span> example <span class="kw">in</span> data[<span class="st">'examples'</span>]:</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  temp_dict <span class="op">=</span> {}</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  temp_dict[<span class="st">'text'</span>] <span class="op">=</span> example[<span class="st">'content'</span>]</span>
+<span id="cb5-5"><a href="#cb5-5"></a>  temp_dict[<span class="st">'entities'</span>] <span class="op">=</span> []</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  <span class="cf">for</span> annotation <span class="kw">in</span> example[<span class="st">'annotations'</span>]:</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    start <span class="op">=</span> annotation[<span class="st">'start'</span>]</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    end <span class="op">=</span> annotation[<span class="st">'end'</span>]</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    label <span class="op">=</span> annotation[<span class="st">'tag_name'</span>].upper()</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    temp_dict[<span class="st">'entities'</span>].append((start, end, label))</span>
+<span id="cb5-11"><a href="#cb5-11"></a>  training_data.append(temp_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+
+</div>
+</section>
+<section id="convert-data-from-dictionary-to-dataframe" class="slide level2">
+<h2>Convert data from Dictionary to Dataframe</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># I am initialing empty lists to store the data for the DataFrame</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>texts <span class="op">=</span> []</span>
+<span id="cb6-4"><a href="#cb6-4"></a>starts <span class="op">=</span> []</span>
+<span id="cb6-5"><a href="#cb6-5"></a>ends <span class="op">=</span> []</span>
+<span id="cb6-6"><a href="#cb6-6"></a>labels <span class="op">=</span> []</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Iterate through the training_data to extract individual entity annotations</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="cf">for</span> example <span class="kw">in</span> training_data:</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    text <span class="op">=</span> example[<span class="st">'text'</span>]</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="cf">for</span> entity <span class="kw">in</span> example[<span class="st">'entities'</span>]:</span>
+<span id="cb6-12"><a href="#cb6-12"></a>        start, end, label <span class="op">=</span> entity</span>
+<span id="cb6-13"><a href="#cb6-13"></a>        <span class="co"># Append data to the lists</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>        texts.append(text)</span>
+<span id="cb6-15"><a href="#cb6-15"></a>        starts.append(start)</span>
+<span id="cb6-16"><a href="#cb6-16"></a>        ends.append(end)</span>
+<span id="cb6-17"><a href="#cb6-17"></a>        labels.append(label)</span>
+<span id="cb6-18"><a href="#cb6-18"></a></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co"># Create a DataFrame from the lists</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'text'</span>: texts, <span class="st">'start'</span>: starts, <span class="st">'end'</span>: ends, <span class="st">'label'</span>: labels})</span>
+<span id="cb6-21"><a href="#cb6-21"></a>df.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="data-as-dataframe" class="slide level2">
+<h2>Data as dataframe</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                text  ...             label
+0  While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+1  While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+2  While bismuth compounds (Pepto-Bismol) decreas...  ...  MEDICALCONDITION
+3  While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+4  While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+
+[5 rows x 4 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="data-statistics" class="slide level2">
+<h2>3.3 Data statistics</h2>
+<ol type="1">
+<li>The dataset contains 134 instances of ‘Medical Condition’, 94 instances of ‘Medicine’, and 67 instances of ‘Pathogen’.</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># Count the occurrences of each label</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>label_counts <span class="op">=</span> df[<span class="st">'label'</span>].value_counts()</span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># Create a DataFrame with labels and their respective counts</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>df_counts <span class="op">=</span> pd.DataFrame({<span class="st">'label'</span>: label_counts.index, <span class="st">'count'</span>: label_counts.values})</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># Plot the frequency of each entity label using a bar plot in Plotly</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>fig <span class="op">=</span> px.bar(df_counts, x<span class="op">=</span><span class="st">'label'</span>, y<span class="op">=</span><span class="st">'count'</span>, text<span class="op">=</span><span class="st">'count'</span>, color<span class="op">=</span><span class="st">'label'</span>,</span>
+<span id="cb8-11"><a href="#cb8-11"></a>             color_discrete_sequence<span class="op">=</span>px.colors.qualitative.Plotly, title<span class="op">=</span><span class="st">'Frequency of Entity Labels'</span>)</span>
+<span id="cb8-12"><a href="#cb8-12"></a></span>
+<span id="cb8-13"><a href="#cb8-13"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="st">'Entity Label'</span>, yaxis_title<span class="op">=</span><span class="st">'Frequency'</span>)</span>
+<span id="cb8-14"><a href="#cb8-14"></a></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co"># Display the counter label inside the bars</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#fig.update_traces(textposition='inside')</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co"># Update axis titles</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#fig.show()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="this-data-provides-an-overview-of-label-distribution." class="slide level2">
+<h2>This data provides an overview of label distribution.</h2>
+<div class="cell">
+<div class="cell-output-display">
+
+<div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>                <div id="67deb5e2-2bc4-4aeb-8221-866910fb7fa7" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("67deb5e2-2bc4-4aeb-8221-866910fb7fa7")) {                    Plotly.newPlot(                        "67deb5e2-2bc4-4aeb-8221-866910fb7fa7",                        [{"alignmentgroup":"True","hovertemplate":"label=%{x}<br>count=%{text}<extra></extra>","legendgroup":"MEDICALCONDITION","marker":{"color":"#636EFA","pattern":{"shape":""}},"name":"MEDICALCONDITION","offsetgroup":"MEDICALCONDITION","orientation":"v","showlegend":true,"text":[134.0],"textposition":"auto","x":["MEDICALCONDITION"],"xaxis":"x","y":[134],"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"label=%{x}<br>count=%{text}<extra></extra>","legendgroup":"MEDICINE","marker":{"color":"#EF553B","pattern":{"shape":""}},"name":"MEDICINE","offsetgroup":"MEDICINE","orientation":"v","showlegend":true,"text":[94.0],"textposition":"auto","x":["MEDICINE"],"xaxis":"x","y":[94],"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"label=%{x}<br>count=%{text}<extra></extra>","legendgroup":"PATHOGEN","marker":{"color":"#00CC96","pattern":{"shape":""}},"name":"PATHOGEN","offsetgroup":"PATHOGEN","orientation":"v","showlegend":true,"text":[67.0],"textposition":"auto","x":["PATHOGEN"],"xaxis":"x","y":[67],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Entity Label"},"categoryorder":"array","categoryarray":["MEDICALCONDITION","MEDICINE","PATHOGEN"]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Frequency"}},"legend":{"title":{"text":"label"},"tracegroupgap":0},"title":{"text":"Frequency of Entity Labels"},"barmode":"relative"},                        {"responsive": true}                    )                };                            </script>        </div>
+</div>
+</div>
+</section>
+<section id="data-statistics-continued" class="slide level2">
+<h2>Data Statistics Continued</h2>
+<ol start="2" type="1">
+<li>The chart below displays the distribution of biomedical Entity labels in the dataset. ‘Medical Condition’ is the most prevalent at 45.4%, followed by ‘Medicine’ at 31.9%, and ‘Pathogen’ at 22.7%. The chart provides insights into the dataset composition and label prevalence..</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># Get the counts of each unique label</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>label_counts <span class="op">=</span> df[<span class="st">'label'</span>].value_counts()</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co"># Plot a pie chart using Plotly</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>fig <span class="op">=</span> px.pie(label_counts, values<span class="op">=</span>label_counts.values, names<span class="op">=</span>label_counts.index, title<span class="op">=</span><span class="st">'Proportion of Entity Labels'</span>, hole<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb9-8"><a href="#cb9-8"></a>fig.update_traces(textinfo<span class="op">=</span><span class="st">'percent+label'</span>, textfont_size<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#fig.show()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="chart-of-date" class="slide level2">
+<h2>Chart of Date</h2>
+<div class="cell">
+<div class="cell-output-display">
+
+<div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>                <div id="a7eefb1a-400c-47c1-9a9b-78bd4b4b5b7b" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("a7eefb1a-400c-47c1-9a9b-78bd4b4b5b7b")) {                    Plotly.newPlot(                        "a7eefb1a-400c-47c1-9a9b-78bd4b4b5b7b",                        [{"domain":{"x":[0.0,1.0],"y":[0.0,1.0]},"hole":0.3,"hovertemplate":"label=%{label}<br>value=%{value}<extra></extra>","labels":["MEDICALCONDITION","MEDICINE","PATHOGEN"],"legendgroup":"","name":"","showlegend":true,"values":[134,94,67],"type":"pie","textfont":{"size":12},"textinfo":"percent+label"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"legend":{"tracegroupgap":0},"title":{"text":"Proportion of Entity Labels"}},                        {"responsive": true}                    )                };                            </script>        </div>
+</div>
+</div>
+</section>
+<section id="data-statistics-continued-1" class="slide level2">
+<h2>Data Statistics Continued</h2>
+<ol start="3" type="1">
+<li>The histogram below visualizes the start positions of entity labels in the text. It reveals that most entities occur within the first five hundred words.</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Plot a histogram of entity start positions using Plotly</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>fig <span class="op">=</span> px.histogram(df, x<span class="op">=</span><span class="st">'start'</span>, nbins<span class="op">=</span><span class="dv">30</span>, title<span class="op">=</span><span class="st">'Histogram of Entity Start Positions'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="st">'Entity Start Position'</span>, yaxis_title<span class="op">=</span><span class="st">'Frequency'</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#fig.show()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="histogram-of-date" class="slide level2">
+<h2>Histogram of Date</h2>
+<div class="cell">
+<div class="cell-output-display">
+
+<div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>                <div id="115299d9-4b7f-43a6-8b93-a10c3d96f71a" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("115299d9-4b7f-43a6-8b93-a10c3d96f71a")) {                    Plotly.newPlot(                        "115299d9-4b7f-43a6-8b93-a10c3d96f71a",                        [{"alignmentgroup":"True","bingroup":"x","hovertemplate":"start=%{x}<br>count=%{y}<extra></extra>","legendgroup":"","marker":{"color":"#636efa","pattern":{"shape":""}},"name":"","nbinsx":30,"offsetgroup":"","orientation":"v","showlegend":false,"x":[360,383,104,679,6,25,461,577,853,188,754,870,823,852,461,535,692,563,364,0,94,178,221,23,409,386,0,24,120,211,52,234,148,1211,38,356,939,1638,1212,262,60,718,227,678,197,1372,856,159,130,262,561,108,1670,80,1610,453,797,595,46,823,1124,1630,579,1358,1618,504,144,1390,81,211,280,401,378,473,255,0,394,227,95,35,162,165,384,1269,1343,977,1027,35,240,70,453,240,360,319,378,271,0,1305,33,897,1799,1549,658,226,1422,1367,921,1864,1394,286,357,467,254,1623,910,1809,1881,1573,1843,33,1921,1683,1623,132,331,1215,285,736,116,155,126,70,139,106,91,81,58,327,514,513,433,452,276,523,564,433,538,345,65,550,524,89,423,659,436,673,30,454,647,87,542,532,30,561,623,471,632,542,648,379,152,411,392,176,158,95,187,147,140,384,1098,1687,49,1173,1702,781,1563,48,603,1675,1613,369,1291,1546,1394,835,1106,1391,455,1391,584,88,335,52,118,33,46,82,33,104,523,138,155,299,446,279,279,134,753,337,445,456,471,419,365,707,181,456,518,154,708,463,77,88,187,610,239,55,531,416,379,352,139,0,88,0,203,258,181,51,0,38,274,11,302,301,380,170,0,267,248,0,43,145,0,176,64,191,639,35,712,20,128,48,101,112,112,48,88,191,0,845,756,468,227,845,237,777,855,215,652,455,251,455,78],"xaxis":"x","yaxis":"y","type":"histogram"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Entity Start Position"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Frequency"}},"legend":{"tracegroupgap":0},"title":{"text":"Histogram of Entity Start Positions"},"barmode":"relative"},                        {"responsive": true}                    )                };                            </script>        </div>
+</div>
+</div>
+</section>
+<section id="data-statistics-continued-2" class="slide level2">
+<h2>Data Statistics Continued</h2>
+<ol start="4" type="1">
+<li>The box plot below shows the start and end positions of entity labels, with the majority located below the five hundredth position.</li>
+</ol>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Create box plots for 'start' and 'end' columns using Plotly</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>fig <span class="op">=</span> px.box(df, y<span class="op">=</span>[<span class="st">'start'</span>, <span class="st">'end'</span>], points<span class="op">=</span><span class="st">'all'</span>, title<span class="op">=</span><span class="st">'Box Plots of Start and End Entity Positions'</span>)</span>
+<span id="cb11-6"><a href="#cb11-6"></a>fig.update_layout(yaxis_title<span class="op">=</span><span class="st">'Value'</span>, xaxis_title<span class="op">=</span><span class="st">'Column'</span>)</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#fig.show()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="boxplot-of-data" class="slide level2">
+<h2>Boxplot of Data</h2>
+<div class="cell">
+<div class="cell-output-display">
+
+<div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>                <div id="2fa47aec-2534-4df0-8fe2-18fda054b5b7" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("2fa47aec-2534-4df0-8fe2-18fda054b5b7")) {                    Plotly.newPlot(                        "2fa47aec-2534-4df0-8fe2-18fda054b5b7",                        [{"alignmentgroup":"True","boxpoints":"all","hovertemplate":"variable=%{x}<br>value=%{y}<extra></extra>","legendgroup":"","marker":{"color":"#636efa"},"name":"","notched":false,"offsetgroup":"","orientation":"v","showlegend":false,"x":["start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","start","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end","end"],"x0":" ","xaxis":"x","y":[360,383,104,679,6,25,461,577,853,188,754,870,823,852,461,535,692,563,364,0,94,178,221,23,409,386,0,24,120,211,52,234,148,1211,38,356,939,1638,1212,262,60,718,227,678,197,1372,856,159,130,262,561,108,1670,80,1610,453,797,595,46,823,1124,1630,579,1358,1618,504,144,1390,81,211,280,401,378,473,255,0,394,227,95,35,162,165,384,1269,1343,977,1027,35,240,70,453,240,360,319,378,271,0,1305,33,897,1799,1549,658,226,1422,1367,921,1864,1394,286,357,467,254,1623,910,1809,1881,1573,1843,33,1921,1683,1623,132,331,1215,285,736,116,155,126,70,139,106,91,81,58,327,514,513,433,452,276,523,564,433,538,345,65,550,524,89,423,659,436,673,30,454,647,87,542,532,30,561,623,471,632,542,648,379,152,411,392,176,158,95,187,147,140,384,1098,1687,49,1173,1702,781,1563,48,603,1675,1613,369,1291,1546,1394,835,1106,1391,455,1391,584,88,335,52,118,33,46,82,33,104,523,138,155,299,446,279,279,134,753,337,445,456,471,419,365,707,181,456,518,154,708,463,77,88,187,610,239,55,531,416,379,352,139,0,88,0,203,258,181,51,0,38,274,11,302,301,380,170,0,267,248,0,43,145,0,176,64,191,639,35,712,20,128,48,101,112,112,48,88,191,0,845,756,468,227,845,237,777,855,215,652,455,251,455,78,371,408,112,689,23,37,470,589,865,198,762,880,833,853,469,543,704,571,382,8,116,189,232,32,435,401,22,27,123,214,55,237,151,1589,44,374,950,1639,1588,269,78,731,248,690,206,1385,867,169,142,268,574,128,1680,106,1616,465,817,606,58,844,1136,1644,590,1370,1626,516,154,1408,106,222,291,413,396,490,263,12,406,239,110,41,168,167,396,1281,1347,983,1032,68,252,74,457,251,376,323,386,282,19,1319,42,905,1807,1559,679,244,1432,1388,946,1879,1416,300,379,486,269,1635,919,1827,1907,1585,1855,41,1951,1693,1636,144,351,1226,306,752,124,170,137,79,149,114,104,89,68,340,521,522,447,462,285,536,571,446,548,356,77,558,536,115,431,667,449,689,38,465,657,106,554,540,39,571,630,490,645,555,667,390,167,422,405,196,167,119,193,156,145,395,1112,1697,72,1178,1713,792,1573,72,613,1685,1629,379,1301,1558,1402,848,1112,1392,467,1402,597,98,346,63,129,42,54,91,43,114,541,148,170,313,462,283,282,161,773,361,467,466,479,441,383,722,201,467,536,165,729,476,86,98,202,620,258,65,534,427,390,364,149,13,109,14,229,279,201,73,10,46,279,21,312,312,390,175,9,288,261,13,59,167,14,189,82,212,648,46,725,30,137,58,110,123,124,57,99,202,9,852,775,476,235,851,245,793,868,225,663,464,264,463,93],"y0":" ","yaxis":"y","type":"box"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Column"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Value"}},"legend":{"tracegroupgap":0},"title":{"text":"Box Plots of Start and End Entity Positions"},"boxmode":"group"},                        {"responsive": true}                    )                };                            </script>        </div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="results" class="title-slide slide level1 center">
+<h1>Results</h1>
+
+</section>
+<section id="transformer-model-results" class="slide level2">
+<h2>4. Transformer Model Results</h2>
+<p>Loading Required Libraries for training</p>
+<p>The following code block formats the raw data into a structure suitable for training a NER model. The raw data contains multiple examples, each with text content and annotations. The annotations include the start and end positions of entities and their corresponding labels. The output is a list of dictionaries, each representing an example containing the text and a list of entities with their positions and labels.</p>
+</section>
+<section id="transformer-model-code" class="slide level2">
+<h2>Transformer Model Code</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>training_data <span class="op">=</span> []</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="cf">for</span> example <span class="kw">in</span> data[<span class="st">'examples'</span>]:</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  temp_dict <span class="op">=</span> {}</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  temp_dict[<span class="st">'text'</span>] <span class="op">=</span> example[<span class="st">'content'</span>]</span>
+<span id="cb12-5"><a href="#cb12-5"></a>  temp_dict[<span class="st">'entities'</span>] <span class="op">=</span> []</span>
+<span id="cb12-6"><a href="#cb12-6"></a>  <span class="cf">for</span> annotation <span class="kw">in</span> example[<span class="st">'annotations'</span>]:</span>
+<span id="cb12-7"><a href="#cb12-7"></a>    start <span class="op">=</span> annotation[<span class="st">'start'</span>]</span>
+<span id="cb12-8"><a href="#cb12-8"></a>    end <span class="op">=</span> annotation[<span class="st">'end'</span>]</span>
+<span id="cb12-9"><a href="#cb12-9"></a>    label <span class="op">=</span> annotation[<span class="st">'tag_name'</span>].upper()</span>
+<span id="cb12-10"><a href="#cb12-10"></a>    temp_dict[<span class="st">'entities'</span>].append((start, end, label))</span>
+<span id="cb12-11"><a href="#cb12-11"></a>  training_data.append(temp_dict)</span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="bu">print</span>(<span class="st">'Our dataset contains the following number of samples: '</span>, <span class="bu">len</span>(training_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Our dataset contains the following number of samples:  31</code></pre>
+</div>
+</div>
+</section>
+<section id="transformer-model-code-continued" class="slide level2">
+<h2>Transformer Model Code Continued</h2>
+<p>This code formats entity annotations for our NER task. It selects the first training example, retrieves the text and annotated entities, and presents them in a table with start and end positions and labels. The output includes the text and a table of entities.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-2"><a href="#cb14-2"></a>example <span class="op">=</span> training_data[<span class="dv">0</span>]</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co"># Extract text and entities from the selected example</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>text <span class="op">=</span> example[<span class="st">'text'</span>]</span>
+<span id="cb14-5"><a href="#cb14-5"></a>entities <span class="op">=</span> example[<span class="st">'entities'</span>]</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co"># Create a dataframe to store the entities with column names: Start, End, Label</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>entities_df <span class="op">=</span> pd.DataFrame(entities, columns<span class="op">=</span>[<span class="st">'Start'</span>, <span class="st">'End'</span>, <span class="st">'Label'</span>])</span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co"># Display the text and entities table</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="bu">print</span>(<span class="st">"Text:"</span>, text)</span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="bu">print</span>(<span class="st">"Entities:"</span>)</span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="bu">print</span>(entities_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="printed-output" class="slide level2">
+<h2>Printed Output</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Text: While bismuth compounds (Pepto-Bismol) decreased the number of bowel movements in those with travelers' diarrhea, they do not decrease the length of illness.[91] Anti-motility agents like loperamide are also effective at reducing the number of stools but not the duration of disease.[8] These agents should be used only if bloody diarrhea is not present.[92]
+
+Diosmectite, a natural aluminomagnesium silicate clay, is effective in alleviating symptoms of acute diarrhea in children,[93] and also has some effects in chronic functional diarrhea, radiation-induced diarrhea, and chemotherapy-induced diarrhea.[45] Another absorbent agent used for the treatment of mild diarrhea is kaopectate.
+
+Racecadotril an antisecretory medication may be used to treat diarrhea in children and adults.[86] It has better tolerability than loperamide, as it causes less constipation and flatulence.[94]</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Entities:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Start  End             Label
+0     360  371          MEDICINE
+1     383  408          MEDICINE
+2     104  112  MEDICALCONDITION
+3     679  689          MEDICINE
+4       6   23          MEDICINE
+5      25   37          MEDICINE
+6     461  470  MEDICALCONDITION
+7     577  589          MEDICINE
+8     853  865  MEDICALCONDITION
+9     188  198          MEDICINE
+10    754  762  MEDICALCONDITION
+11    870  880  MEDICALCONDITION
+12    823  833          MEDICINE
+13    852  853  MEDICALCONDITION
+14    461  469  MEDICALCONDITION
+15    535  543  MEDICALCONDITION
+16    692  704          MEDICINE
+17    563  571  MEDICALCONDITION</code></pre>
+</div>
+</div>
+</section>
+<section id="transformer-model-code-continued-1" class="slide level2">
+<h2>Transformer Model Code Continued</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co"># Initialize empty lists to store the data for the DataFrame</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>texts <span class="op">=</span> []</span>
+<span id="cb18-4"><a href="#cb18-4"></a>starts <span class="op">=</span> []</span>
+<span id="cb18-5"><a href="#cb18-5"></a>ends <span class="op">=</span> []</span>
+<span id="cb18-6"><a href="#cb18-6"></a>labels <span class="op">=</span> []</span>
+<span id="cb18-7"><a href="#cb18-7"></a></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co"># Iterate through the training_data to extract individual entity annotations</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="cf">for</span> example <span class="kw">in</span> training_data:</span>
+<span id="cb18-10"><a href="#cb18-10"></a>    text <span class="op">=</span> example[<span class="st">'text'</span>]</span>
+<span id="cb18-11"><a href="#cb18-11"></a>    <span class="cf">for</span> entity <span class="kw">in</span> example[<span class="st">'entities'</span>]:</span>
+<span id="cb18-12"><a href="#cb18-12"></a>        start, end, label <span class="op">=</span> entity</span>
+<span id="cb18-13"><a href="#cb18-13"></a>        <span class="co"># Append data to the lists</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>        texts.append(text)</span>
+<span id="cb18-15"><a href="#cb18-15"></a>        starts.append(start)</span>
+<span id="cb18-16"><a href="#cb18-16"></a>        ends.append(end)</span>
+<span id="cb18-17"><a href="#cb18-17"></a>        labels.append(label)</span>
+<span id="cb18-18"><a href="#cb18-18"></a></span>
+<span id="cb18-19"><a href="#cb18-19"></a><span class="co"># Create a DataFrame from the lists</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'text'</span>: texts, <span class="st">'start'</span>: starts, <span class="st">'end'</span>: ends, <span class="st">'label'</span>: labels})</span>
+<span id="cb18-21"><a href="#cb18-21"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="executed-code-results" class="slide level2">
+<h2>Executed Code Results</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                  text  ...             label
+0    While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+1    While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+2    While bismuth compounds (Pepto-Bismol) decreas...  ...  MEDICALCONDITION
+3    While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+4    While bismuth compounds (Pepto-Bismol) decreas...  ...          MEDICINE
+..                                                 ...  ...               ...
+290  Influenza, commonly known as "the flu", is an ...  ...  MEDICALCONDITION
+291  Influenza, commonly known as "the flu", is an ...  ...  MEDICALCONDITION
+292  Influenza, commonly known as "the flu", is an ...  ...  MEDICALCONDITION
+293  Influenza, commonly known as "the flu", is an ...  ...  MEDICALCONDITION
+294  Influenza, commonly known as "the flu", is an ...  ...          PATHOGEN
+
+[295 rows x 4 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="transformer-model-results-continued" class="slide level2">
+<h2>Transformer Model Results Continued</h2>
+<p>The Transformer model needed to be deployed in a Google Colab Repo because our computers did not have the power to train the transformer model when running out of a CPU. We get the following results which are good besides the eval_loss with over 31%. The hyperparameters were modified by increasing the epochs from 3 to 5 and 5 to 10, but the loss decreased to 25%. Precision and accuracy did not improve. The best approach to reduce the loss is to get more data. We could not find the more annotated dataset for NER in health. In Google Colab, a Hardware accelerator (GPU) was used to increase the training speed, and it worked. The link for further review is provided <a href="https://colab.research.google.com/drive/1qKpXd2sP-Iesi76W-232hVUPkl9zvl5s?usp=sharing">Google Colab Code</a></p>
+<p>{‘eval_loss’: 0.3150147497653961, ‘eval_precision’: 0.9375, ‘eval_recall’: 1.0, ‘eval_f1’: 0.967741935483871, ‘eval_accuracy’: 0.9375, ‘eval_runtime’: 9.0895, ‘eval_samples_per_second’: 0.77, ‘eval_steps_per_second’: 0.11, ‘epoch’: 3.0}</p>
+</section>
+<section id="rnn-results" class="slide level2">
+<h2>5 RNN Results</h2>
+<p>Load required libraries for the RNN.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> LSTM, Dense, Dropout, TimeDistributed, Bidirectional</span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="im">from</span> tensorflow.keras.preprocessing.sequence <span class="im">import</span> pad_sequences</span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="im">from</span> tensorflow.keras.utils <span class="im">import</span> to_categorical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+
+</div>
+</section>
+<section id="rnn-results-continued" class="slide level2">
+<h2>RNN Results Continued</h2>
+<p>Using the dataframe created from the transformer model a vocabulary of words and labels was created and then converted into indices. The sequences are then padded to a maximum length and then converted to one-hot encoded vectors. A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0. This is necessary to train the model with tensorflow and recurrent neural networks.</p>
+</section>
+<section id="rnn-code" class="slide level2">
+<h2>RNN Code</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>words <span class="op">=</span> <span class="bu">set</span>(df[<span class="st">'text'</span>].values)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>word2idx <span class="op">=</span> {w: i <span class="op">+</span> <span class="dv">2</span> <span class="cf">for</span> i, w <span class="kw">in</span> <span class="bu">enumerate</span>(words)}</span>
+<span id="cb21-3"><a href="#cb21-3"></a>word2idx[<span class="st">'PAD'</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>word2idx[<span class="st">'UNK'</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a></span>
+<span id="cb21-6"><a href="#cb21-6"></a>tags <span class="op">=</span> <span class="bu">set</span>(df[<span class="st">'label'</span>].values)</span>
+<span id="cb21-7"><a href="#cb21-7"></a>tag2idx <span class="op">=</span> {t: i <span class="op">+</span> <span class="dv">1</span> <span class="cf">for</span> i, t <span class="kw">in</span> <span class="bu">enumerate</span>(tags)}</span>
+<span id="cb21-8"><a href="#cb21-8"></a>tag2idx[<span class="st">'PAD'</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a></span>
+<span id="cb21-10"><a href="#cb21-10"></a>X <span class="op">=</span> [[word2idx.get(w, <span class="dv">1</span>) <span class="cf">for</span> w <span class="kw">in</span> sentence.split()] <span class="cf">for</span> sentence <span class="kw">in</span> df[<span class="st">'text'</span>].values]</span>
+<span id="cb21-11"><a href="#cb21-11"></a>y <span class="op">=</span> [[tag2idx[t] <span class="cf">for</span> t <span class="kw">in</span> sentence.split()] <span class="cf">for</span> sentence <span class="kw">in</span> df[<span class="st">'label'</span>].values]</span>
+<span id="cb21-12"><a href="#cb21-12"></a></span>
+<span id="cb21-13"><a href="#cb21-13"></a>maxlen <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(x) <span class="cf">for</span> x <span class="kw">in</span> X)</span>
+<span id="cb21-14"><a href="#cb21-14"></a>X <span class="op">=</span> pad_sequences(X, padding<span class="op">=</span><span class="st">'post'</span>, maxlen<span class="op">=</span>maxlen)</span>
+<span id="cb21-15"><a href="#cb21-15"></a>y <span class="op">=</span> pad_sequences(y, padding<span class="op">=</span><span class="st">'post'</span>, maxlen<span class="op">=</span>maxlen)</span>
+<span id="cb21-16"><a href="#cb21-16"></a>y <span class="op">=</span> to_categorical(y, num_classes<span class="op">=</span><span class="bu">len</span>(tag2idx))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+
+</div>
+</section>
+<section id="after-the-data-is-manipulated-the-rnn-model-is-created-and-compiled-with-the-use-of-tensorflow" class="slide level2">
+<h2>After the data is manipulated the RNN model is created and compiled with the use of tensorflow</h2>
+<div class="cell">
+
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>model <span class="op">=</span> tf.keras.Sequential([</span>
+<span id="cb22-2"><a href="#cb22-2"></a>    tf.keras.layers.Embedding(<span class="bu">len</span>(word2idx), <span class="dv">128</span>),</span>
+<span id="cb22-3"><a href="#cb22-3"></a>    tf.keras.layers.LSTM(<span class="dv">128</span>, return_sequences<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb22-4"><a href="#cb22-4"></a>    tf.keras.layers.Dropout(<span class="fl">0.2</span>),</span>
+<span id="cb22-5"><a href="#cb22-5"></a>    tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(<span class="bu">len</span>(tag2idx), activation<span class="op">=</span><span class="st">'softmax'</span>))</span>
+<span id="cb22-6"><a href="#cb22-6"></a>])</span>
+<span id="cb22-7"><a href="#cb22-7"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'adam'</span>, loss<span class="op">=</span><span class="st">'categorical_crossentropy'</span>, metrics<span class="op">=</span>[<span class="st">'accuracy'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="lastly-the-model-is-fitted-and-the-accuracy-is-calculated" class="slide level2">
+<h2>Lastly the model is fitted and the accuracy is calculated</h2>
+<p>The RNN model is shown to be very effective with an accuracy of 0.9967.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>model.fit(X, y, batch_size<span class="op">=</span><span class="dv">32</span>, epochs<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/10
+10/10 - 5s - loss: 0.9448 - accuracy: 0.9037 - 5s/epoch - 542ms/step
+Epoch 2/10
+10/10 - 3s - loss: 0.0234 - accuracy: 0.9967 - 3s/epoch - 284ms/step
+Epoch 3/10
+10/10 - 3s - loss: 0.0123 - accuracy: 0.9967 - 3s/epoch - 286ms/step
+Epoch 4/10
+10/10 - 3s - loss: 0.0103 - accuracy: 0.9967 - 3s/epoch - 289ms/step
+Epoch 5/10
+10/10 - 3s - loss: 0.0095 - accuracy: 0.9967 - 3s/epoch - 289ms/step
+Epoch 6/10
+10/10 - 3s - loss: 0.0091 - accuracy: 0.9967 - 3s/epoch - 287ms/step
+Epoch 7/10
+10/10 - 3s - loss: 0.0088 - accuracy: 0.9967 - 3s/epoch - 295ms/step
+Epoch 8/10
+10/10 - 3s - loss: 0.0085 - accuracy: 0.9967 - 3s/epoch - 291ms/step
+Epoch 9/10
+10/10 - 3s - loss: 0.0083 - accuracy: 0.9967 - 3s/epoch - 287ms/step
+Epoch 10/10
+10/10 - 3s - loss: 0.0082 - accuracy: 0.9967 - 3s/epoch - 302ms/step
+&lt;keras.callbacks.History object at 0x13476b390&gt;</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
+<p>Named Entity Recognition (NER) is a key NLP task that involves identifying named entities in text. With advances in deep learning and large availability of computational resources, methods based on deep learning have demonstrated obvious advantages over traditional methods and have become mainstream in the NER field <span class="citation" data-cites="liu2021Hybrid">(<a href="#/references" role="doc-biblioref" onclick="">Liu et al. 2021</a>)</span>. Deep learning techniques, such as Recurrent Neural Networks (RNNs) and the Transformer Model, are clearly effective in NER Tasks. RNNs, including LSTMs, excel at processing sequences and capturing context, while the Transformer model is known for its self-attention mechanism and efficient parallel processing.</p>
+</section>
+<section id="conclusion-continued" class="slide level2">
+<h2>Conclusion Continued</h2>
+<p>Both architectures contribute to advancing NER, and the choice between them depends on the specific NLP problem. In the NLP problem in this paper it can be seen that the RNN model has a higher accuracy than the transformer model, so the RNN model would be the preferred method to use in NER practices. This conclusion coicides with <span class="citation" data-cites="yadav2019survey">(<a href="#/references" role="doc-biblioref" onclick="">Yadav and Bethard 2019</a>)</span>, who agreed that neural network models generally outperform feature-engineered models. As deep learning research progresses, we anticipate further advancements in NER performance using these techniques.</p>
+</section></section>
+<section id="references" class="title-slide slide level1 smaller scrollable">
+<h1>References</h1>
+<p><span class="citation" data-cites="raffel2020exploring">(<a href="#/references" role="doc-biblioref" onclick="">Raffel et al. 2020</a>)</span> <span class="citation" data-cites="souza2020portuguese">(<a href="#/references" role="doc-biblioref" onclick="">Souza, Nogueira, and Lotufo 2020</a>)</span></p>
+<div class="footer footer-default">
+
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Cho2019BiomedNER" class="csl-entry" role="doc-biblioentry">
+Cho, Hyeijin, and Hyunju Lee. 2019. <span>“Biomedical Named Entity Recognition Using Deep Neural Networks with Contextual Information.”</span>
+</div>
+<div id="ref-liu2021Hybrid" class="csl-entry" role="doc-biblioentry">
+Liu, Jian, Lei Gao, Sujie Guo, Rui Ding, Xin Huang, Long Ye, Qinghua Meng, Asef Nazari, and Dhananjay Thiruvady. 2021. <span>“A Hybrid Deep-Learning Approach for Complex Biochemical Named Entity Recognition.”</span> <em>Knowledge-Based Systems</em> 221: 106958. <a href="https://doi.org/10.1016/j.knosys.2021.106958">https://doi.org/10.1016/j.knosys.2021.106958</a>.
+</div>
+<div id="ref-phuong2022formal" class="csl-entry" role="doc-biblioentry">
+Phuong, Mary, and Marcus Hutter. 2022. <span>“Formal Algorithms for Transformers.”</span> <a href="https://arxiv.org/abs/2207.09238">https://arxiv.org/abs/2207.09238</a>.
+</div>
+<div id="ref-raffel2020exploring" class="csl-entry" role="doc-biblioentry">
+Raffel, Colin, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J. Liu. 2020. <span>“Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer.”</span> <a href="https://arxiv.org/abs/1910.10683">https://arxiv.org/abs/1910.10683</a>.
+</div>
+<div id="ref-souza2020portuguese" class="csl-entry" role="doc-biblioentry">
+Souza, Fábio, Rodrigo Nogueira, and Roberto Lotufo. 2020. <span>“Portuguese Named Entity Recognition Using BERT-CRF.”</span> <a href="https://arxiv.org/abs/1909.10649">https://arxiv.org/abs/1909.10649</a>.
+</div>
+<div id="ref-xiong2021Improving" class="csl-entry" role="doc-biblioentry">
+Xiong, Chen, Y., and Y. Zhou. 2021. <span>“Improving Deep Learning Method for Biomedical Named Entity Recognition by Using Entity Definition Information.”</span> <em>BMC Bioinformatics</em> 22 (600).
+</div>
+<div id="ref-yadav2019survey" class="csl-entry" role="doc-biblioentry">
+Yadav, Vikas, and Steven Bethard. 2019. <span>“A Survey on Recent Advances in Named Entity Recognition from Deep Learning Models.”</span> <a href="https://arxiv.org/abs/1910.11470">https://arxiv.org/abs/1910.11470</a>.
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="NER_Slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="NER_Slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="NER_Slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="NER_Slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
