@@ -34,9 +34,6 @@ editor: visual
 ::: incremental
 -   Current NER techniques have major limitations being that the standard language models are unidirectional, operating in a single direction, and thus limit the choice of architecture that can be used for pre-training.
 -   While the deep learning techniques we have chosen are not perfect, they do directly address this major limitation and we will show their effectiveness moving forward.
--   Limitations of our chosen techniques:
-    -   Transformer Model: The size of the training data can be a limitation here. If there is not enough training data it can make the model less effective.
-    -   RNN: RNN's are prone to overfitting which is especially true when there is a small dataset.
 :::
 
 ## What is Transformer Model?
@@ -166,7 +163,11 @@ Text: Buprenorphine has been shown experimentally (1982--1995) to be effective a
 -   The network is optimized using back propagation and a gradient descent algorithm
 -   Back propagation is used to find the gradient of a parameter
 -   A gradient descent algorithm is used to find values that minimize a loss function (such as error)
+:::
 
+## What is a Recurrent Neural Network (RNN) starting with a Neural Network
+
+::: nonincremental
 Example of a Loss function (Mean Squared Error)\
 $\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2$\
 \
@@ -184,17 +185,18 @@ yi\* : actual value
 𝜽j : input
 :::
 
-## What make a RNN different
+## What makes RNN different?
 
 ::: incremental
 -   A recurrent neural network is similar to a basic neural network but with the addition of a feedback loop
-
 -   In these networks activation functions (ƒ) are used to determine whether a neuron in the network is turned on or off
-
 -   The data in feedback loop is included with the input of subsequent data
-
 -   This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data such as text
+:::
 
+## What makes RNN different?
+
+::: nonincremental
     ![](images/Screen%20Shot%202023-04-26%20at%206.14.17%20PM.png){width="562"}
 :::
 
@@ -202,13 +204,14 @@ yi\* : actual value
 
 ::: incremental
 -   One of the main problems RNNs face is an exploding or vanishing gradient
-
 -   This can occur when a large amount of data is used
-
 -   The weight in the feedback loop (W_h) becomes multiplied on itself over and over which will results in an extremely large or extremely small value
+:::
 
+## Limitiations
+
+::: nonincremental
 -   For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of then (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big
-
 -   For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small
 :::
 
@@ -216,22 +219,21 @@ yi\* : actual value
 
 ::: incremental
 -   A common solution to exploding and vanishing gradient is a Long Short-Term Memory (LSTM) cell
-
 -   These cells are located in the feedback loop and contain three gates within the cell
-
     1.  Input gate: determines which information is stored in the cell
 
     2.  Forget gate: determines which information will be discarded
 
     3.  Output gate: provides the activation for the final output
+:::
 
+## Solution to exploding and vanishing gradient
+
+::: nonincremental
 -   These gates use a sigmoid function which outputs a value between zero and one
 
 -   Zero blocks all information and one allows all information through
 
-```{=html}
-<!-- -->
-```
     Sigmoid:\
     $\text{f(x)} = {1/(1+e^{-x})}$\
 
@@ -251,11 +253,15 @@ yi\* : actual value
 
 ## RNN Continued
 
-::: incremental
+::: nonincremental
 -   LSTMs maintain a cell state as a result of the calculations from the equations below along with the sigmoid and the general gate equation
-
 -   This state is what provides the "memory" which makes it useful in named entity recognition
+-   Using LSTM cells in recurrent neural networks allows the network to be applied to large datasets which is very beneficial in the context of named entity recognition
+:::
 
+## Equations for LSTMs
+
+::: nonincremental
     Possible cell state at i-th iteration:\
     $\text{c}_i^*=tanh(w[h_{i-1}, x_i] + b)$\
     \
@@ -267,38 +273,11 @@ yi\* : actual value
     \
     tanh:\
     $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\
-
--   Using LSTM cells in recurrent neural networks allows the network to be applied to large datasets which is very beneficial in the context of named entity recognition
 :::
 
-\
+## Libraries needed
 
-# 3. Data Analysis and Results
-
-## 3.1 Dataset Description
-
-We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens. Similarly to the dataset used in [@xiong2021Improving], the dataset was manually tagged for training. We will use the Transformer model and the RNN model to apply the NER using python programming language. The dataset contains 31 observations and 4 attributes properly explained in the data definition.
-
-## Data Definition
-
-| Column Name | Type    | Description                                         |
-|-------------------|-------------------|----------------------------------|
-| Text        | string  | Sentence including the labels                       |
-| Starts      | integer | Position on where the label starts                  |
-| Ends        | integer | Position on where the label ends                    |
-| Labels      | string  | The label( Medical Condition, Medicine or Pathogen) |
-
-## Data Labels
-
--   Labels:
-    -   Medical condition names (example: influenza, headache, malaria)
-    -   Medicine names (example : aspirin, penicillin, ribavirin, methotrexate)
-    -   Pathogens ( example: Corona Virus, Zika Virus, cynobacteria, E. Coli)
-
-## 3.2 Data Preparation
-
-The following python code will load the required libraries:
-
+::: nonincremental
 -   **nbclient** : Executes Jupyter notebooks programmatically
 
 -   **requests** : Sends HTTP requests and interacts with RESTful APIs in Python
@@ -308,32 +287,11 @@ The following python code will load the required libraries:
 -   **nbformat** : Reads, writes, and manipulates Jupyter Notebook files
 
 -   **plotly.express** : Creates interactive data visualizations with a simple interface
+:::
 
-## Code for analysis
-
-``` r
-library(reticulate)
-# do the following ONCE AND COMMENT
-py_install("nbclient")
-py_install("requests")
-py_install("pandas")
-py_install("nbformat")
-py_install("plotly")
-```
-
-```{r}
-library(reticulate)
-# do the following ONCE AND COMMENT
-py_install("nbclient")
-py_install("requests")
-py_install("pandas")
-py_install("nbformat")
-py_install("plotly")
-```
-
-``` python
+```{python}
 #| echo: false
-import pandas
+import pandas as pd
 import nbclient
 import requests
 import nbformat
@@ -341,34 +299,10 @@ import plotly.express
 ```
 
 ```{python}
-#| echo: false
-import pandas
-import nbclient
-import requests
-import nbformat
-import plotly.express
-```
-
-## Import the data from Github to local.
-
-``` python
 url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
 # HTTP GET request to the raw URL
 response = requests.get(url)
-# I am checking if the request was successful (status code 200)
-if response.status_code == 200:
-    # Parse the JSON data from the response
-    data = response.json()
-    print('Success, the Json data was stored into the data variable')
-else:
-    print('Failed to fetch JSON data:', response.status_code)
-```
-
-```{python}
-url = 'https://raw.githubusercontent.com/jsanc223/datasetCorona2/main/Corona2.json'
-# HTTP GET request to the raw URL
-response = requests.get(url)
-# I am checking if the request was successful (status code 200)
+# Checking if the request was successful (status code 200)
 if response.status_code == 200:
     # Parse the JSON data from the response
     data = response.json()
@@ -410,8 +344,7 @@ for example in data['examples']:
 ## Convert data from Dictionary to Dataframe
 
 ``` python
-import pandas as pd
-# I am initialing empty lists to store the data for the DataFrame
+# Initialing empty lists to store the data for the DataFrame
 texts = []
 starts = []
 ends = []
@@ -433,11 +366,8 @@ df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels}
 df.head(5)
 ```
 
-## Data as dataframe
-
 ```{python}
-import pandas as pd
-# I am initialing empty lists to store the data for the DataFrame
+# Initialing empty lists to store the data for the DataFrame
 texts = []
 starts = []
 ends = []
@@ -459,272 +389,7 @@ df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels}
 df.head(5)
 ```
 
-## 3.3 Data statistics
-
-1.  The dataset contains 134 instances of 'Medical Condition', 94 instances of 'Medicine', and 67 instances of 'Pathogen'.
-
-``` python
-import plotly.express as px
-
-# Count the occurrences of each label
-label_counts = df['label'].value_counts()
-
-# Create a DataFrame with labels and their respective counts
-df_counts = pd.DataFrame({'label': label_counts.index, 'count': label_counts.values})
-
-# Plot the frequency of each entity label using a bar plot in Plotly
-fig = px.bar(df_counts, x='label', y='count', text='count', color='label',
-             color_discrete_sequence=px.colors.qualitative.Plotly, title='Frequency of Entity Labels')
-
-fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
-
-# Display the counter label inside the bars
-#fig.update_traces(textposition='inside')
-# Update axis titles
-#fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
-
-#fig.show()
-```
-
-## This data provides an overview of label distribution.
-
-```{python}
-import plotly.express as px
-
-# Count the occurrences of each label
-label_counts = df['label'].value_counts()
-
-# Create a DataFrame with labels and their respective counts
-df_counts = pd.DataFrame({'label': label_counts.index, 'count': label_counts.values})
-
-# Plot the frequency of each entity label using a bar plot in Plotly
-fig = px.bar(df_counts, x='label', y='count', text='count', color='label',
-             color_discrete_sequence=px.colors.qualitative.Plotly, title='Frequency of Entity Labels')
-
-fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
-
-# Display the counter label inside the bars
-#fig.update_traces(textposition='inside')
-# Update axis titles
-#fig.update_layout(xaxis_title='Entity Label', yaxis_title='Frequency')
-
-#fig.show()
-```
-
-## Data Statistics Continued
-
-2.  The chart below displays the distribution of biomedical Entity labels in the dataset. 'Medical Condition' is the most prevalent at 45.4%, followed by 'Medicine' at 31.9%, and 'Pathogen' at 22.7%. The chart provides insights into the dataset composition and label prevalence..
-
-``` python
-
-import plotly.express as px
-
-# Get the counts of each unique label
-label_counts = df['label'].value_counts()
-# Plot a pie chart using Plotly
-fig = px.pie(label_counts, values=label_counts.values, names=label_counts.index, title='Proportion of Entity Labels', hole=0.3)
-fig.update_traces(textinfo='percent+label', textfont_size=12)
-#fig.show()
-```
-
-## Chart of Date
-
-```{python}
-
-import plotly.express as px
-
-# Get the counts of each unique label
-label_counts = df['label'].value_counts()
-# Plot a pie chart using Plotly
-fig = px.pie(label_counts, values=label_counts.values, names=label_counts.index, title='Proportion of Entity Labels', hole=0.3)
-fig.update_traces(textinfo='percent+label', textfont_size=12)
-#fig.show()
-
-```
-
-## Data Statistics Continued
-
-3.  The histogram below visualizes the start positions of entity labels in the text. It reveals that most entities occur within the first five hundred words.
-
-``` python
-
-import plotly.express as px
-
-# Plot a histogram of entity start positions using Plotly
-fig = px.histogram(df, x='start', nbins=30, title='Histogram of Entity Start Positions')
-fig.update_layout(xaxis_title='Entity Start Position', yaxis_title='Frequency')
-#fig.show()
-```
-
-## Histogram of Date
-
-```{python}
-
-import plotly.express as px
-
-# Plot a histogram of entity start positions using Plotly
-fig = px.histogram(df, x='start', nbins=30, title='Histogram of Entity Start Positions')
-fig.update_layout(xaxis_title='Entity Start Position', yaxis_title='Frequency')
-#fig.show()
-```
-
-## Data Statistics Continued
-
-4.  The box plot below shows the start and end positions of entity labels, with the majority located below the five hundredth position.
-
-``` python
-
-import plotly.express as px
-
-# Create box plots for 'start' and 'end' columns using Plotly
-fig = px.box(df, y=['start', 'end'], points='all', title='Box Plots of Start and End Entity Positions')
-fig.update_layout(yaxis_title='Value', xaxis_title='Column')
-#fig.show()
-```
-
-## Boxplot of Data
-
-```{python}
-
-import plotly.express as px
-
-# Create box plots for 'start' and 'end' columns using Plotly
-fig = px.box(df, y=['start', 'end'], points='all', title='Box Plots of Start and End Entity Positions')
-fig.update_layout(yaxis_title='Value', xaxis_title='Column')
-#fig.show()
-
-```
-
-# Results
-
-## Transformer Model Code
-
-``` python
-training_data = []
-for example in data['examples']:
-  temp_dict = {}
-  temp_dict['text'] = example['content']
-  temp_dict['entities'] = []
-  for annotation in example['annotations']:
-    start = annotation['start']
-    end = annotation['end']
-    label = annotation['tag_name'].upper()
-    temp_dict['entities'].append((start, end, label))
-  training_data.append(temp_dict)
-print('Our dataset contains the following number of samples: ', len(training_data))
-```
-
-```{python}
-training_data = []
-for example in data['examples']:
-  temp_dict = {}
-  temp_dict['text'] = example['content']
-  temp_dict['entities'] = []
-  for annotation in example['annotations']:
-    start = annotation['start']
-    end = annotation['end']
-    label = annotation['tag_name'].upper()
-    temp_dict['entities'].append((start, end, label))
-  training_data.append(temp_dict)
-print('Our dataset contains the following number of samples: ', len(training_data))
-```
-
-## Transformer Model Code Continued
-
-This code formats entity annotations for our NER task. It selects the first training example, retrieves the text and annotated entities, and presents them in a table with start and end positions and labels. The output includes the text and a table of entities.
-
-``` python
-import pandas as pd
-example = training_data[0]
-# Extract text and entities from the selected example
-text = example['text']
-entities = example['entities']
-# Create a dataframe to store the entities with column names: Start, End, Label
-entities_df = pd.DataFrame(entities, columns=['Start', 'End', 'Label'])
-# Display the text and entities table
-print("Text:", text)
-print("Entities:")
-print(entities_df)
-```
-
-## Printed Output
-
-```{python}
-import pandas as pd
-example = training_data[0]
-
-# Extract text and entities from the selected example
-text = example['text']
-entities = example['entities']
-
-# Create a dataframe to store the entities with column names: Start, End, Label
-entities_df = pd.DataFrame(entities, columns=['Start', 'End', 'Label'])
-
-# Display the text and entities table
-print("Text:", text)
-print("Entities:")
-print(entities_df)
-```
-
-## Transformer Model Code Continued
-
-``` python
-import pandas as pd
-# Initialize empty lists to store the data for the DataFrame
-texts = []
-starts = []
-ends = []
-labels = []
-
-# Iterate through the training_data to extract individual entity annotations
-for example in training_data:
-    text = example['text']
-    for entity in example['entities']:
-        start, end, label = entity
-        # Append data to the lists
-        texts.append(text)
-        starts.append(start)
-        ends.append(end)
-        labels.append(label)
-
-# Create a DataFrame from the lists
-df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels})
-df
-```
-
-## Executed Code Results
-
-```{python}
-import pandas as pd
-# Initialize empty lists to store the data for the DataFrame
-texts = []
-starts = []
-ends = []
-labels = []
-
-# Iterate through the training_data to extract individual entity annotations
-for example in training_data:
-    text = example['text']
-    for entity in example['entities']:
-        start, end, label = entity
-        # Append data to the lists
-        texts.append(text)
-        starts.append(start)
-        ends.append(end)
-        labels.append(label)
-
-# Create a DataFrame from the lists
-df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels})
-df
-```
-
-## Transformer Model Results Continued
-
-The Transformer model needed to be deployed in a Google Colab Repo because our computers did not have the power to train the transformer model when running out of a CPU. We get the following results which are good besides the eval_loss with over 31%. The hyperparameters were modified by increasing the epochs from 3 to 5 and 5 to 10, but the loss decreased to 25%. Precision and accuracy did not improve. The best approach to reduce the loss is to get more data. We could not find the more annotated dataset for NER in health. In Google Colab, a Hardware accelerator (GPU) was used to increase the training speed, and it worked. The link for further review is provided [Google Colab Code](https://colab.research.google.com/drive/1qKpXd2sP-Iesi76W-232hVUPkl9zvl5s?usp=sharing)
-
-{'eval_loss': 0.3150147497653961, 'eval_precision': 0.9375, 'eval_recall': 1.0, 'eval_f1': 0.967741935483871, 'eval_accuracy': 0.9375, 'eval_runtime': 9.0895, 'eval_samples_per_second': 0.77, 'eval_steps_per_second': 0.11, 'epoch': 3.0}
-
-## 5 RNN Results
+## RNN Results
 
 Load required libraries for the RNN.
 
@@ -748,7 +413,13 @@ from tensorflow.keras.utils import to_categorical
 
 ## RNN Results Continued
 
-Using the dataframe created from the transformer model a vocabulary of words and labels was created and then converted into indices. The sequences are then padded to a maximum length and then converted to one-hot encoded vectors. A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0. This is necessary to train the model with tensorflow and recurrent neural networks.
+-   Using the dataframe created before a vocabulary of words and labels was created and then converted into indices
+
+-   The sequences are then padded to a maximum length and then converted to one-hot encoded vectors
+
+-   A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0
+
+-   This is necessary to train the model with tensorflow
 
 ## RNN Code
 
@@ -814,7 +485,8 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 ## Lastly the model is fitted and the accuracy is calculated
 
-The RNN model is shown to be very effective with an accuracy of 0.9967.
+::: incremental
+The RNN model's accuracy is 0.9967
 
 ``` python
 model.fit(X, y, batch_size=32, epochs=10)
@@ -823,6 +495,7 @@ model.fit(X, y, batch_size=32, epochs=10)
 ```{python}
 model.fit(X, y, batch_size=32, epochs=10, verbose=2)
 ```
+:::
 
 ## Conclusion
 
@@ -830,14 +503,4 @@ model.fit(X, y, batch_size=32, epochs=10, verbose=2)
 -   NER is a key NLP task that involves identifying named entities in a text.
 -   Deep learning techniques have become more mainstream in the NER field due to their major advantages.
 -   The techniques we have chose, RNN and Transformer Model, have shown this to be true for various situations.
--   The accuracies of our models were:
-    -   Transformer Model: 0.9375
-    -   RNN: 0.9967
--   This shows that when doing NER for our chosen dataset, RNN was more effective after training, but that both are over 90% accurate given the data that we have used.
-:::
-
-# References
-
-::: incremental
-[@raffel2020exploring] [@souza2020portuguese]
 :::
