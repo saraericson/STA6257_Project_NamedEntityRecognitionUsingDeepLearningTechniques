@@ -76,7 +76,7 @@ editor: visual
 
 ## Transformer Methods
 
-::: incremental
+::: nonincremental
 -   Scaled Dot-Product Attention formula\
     \
     $\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$\
@@ -86,7 +86,7 @@ editor: visual
 
 ## Transformer - How to do it?
 
-::: incrememtal
+::: nonincrememtal
 1.  Annotated Dataset for Training
 
     -   Labelstud.io , Prodi.gy
@@ -108,7 +108,7 @@ editor: visual
 
 ## Transformer Limitations
 
-::: incremental
+::: nonincremental
 -   Standard language models are unidirectional, restricting pre-training architecture options and limiting context awareness.
 
 -   Transformers have high computational complexity due to numerous parameters, requiring significant resources and specialized hardware for deep models and long sequences.
@@ -116,7 +116,7 @@ editor: visual
 
 ## Dataset
 
-::: incremental
+::: nonincremental
 We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens.
 
 -   Labels:
@@ -128,7 +128,7 @@ We will use the dataset called corona2 from Kaggle to identify Natural Entity Re
 
 ## Dataset Definition
 
-::: incremental
+::: nonincremental
 | Column Name | Type    | Description                                         |
 |-------------------|-------------------|----------------------------------|
 | Text        | string  | Sentence including the labels                       |
@@ -139,7 +139,7 @@ We will use the dataset called corona2 from Kaggle to identify Natural Entity Re
 
 ## Dataset Sample
 
-::: incremental
+::: nonincremental
 Text: Buprenorphine has been shown experimentally (1982--1995) to be effective against severe, refractory depression.
 
 ::: columns
@@ -155,27 +155,27 @@ Text: Buprenorphine has been shown experimentally (1982--1995) to be effective a
 
 ## Dataset Visualization - Labels
 
-::: incremental
+::: nonincremental
 ![](images/frequency_labels-01.png){fig-align="center"}
 :::
 
 ## Data Visualization - Position
 
-::: incremental
+::: nonincremental
 ![](images/start_end_Positions-01.png){fig-align="center"}
 :::
 
-## What is a Recurrent Neural Network (RNN) starting with a Neural Network
+## A basic neural network
 
-::: incremental
+::: nonincremental
 -   A basic neural network has an input layer, a hidden layer or layers, and an output layer
--   Between the layers are weights and biases that are used in the calculation of the output
+-   Between the layers are weights and biases that are used in the calculations between layers
 -   The network is optimized using back propagation and a gradient descent algorithm
 -   Back propagation is used to find the gradient of a parameter
--   A gradient descent algorithm is used to find values that minimize a loss function (such as error)
+-   A gradient descent algorithm is used to find values that minimize a loss function
 :::
 
-## What is a Recurrent Neural Network (RNN) starting with a Neural Network
+## Basic neural network equations
 
 ::: nonincremental
 Example of a Loss function (Mean Squared Error):\
@@ -191,15 +191,17 @@ yi\* : actual value
 𝛼 : learning rate
 
 𝜽j : input
+
+J(𝜽) : parameter
 :::
 
 ## What makes RNN different?
 
 ::: nonincremental
 -   A recurrent neural network is similar to a basic neural network but with the addition of a feedback loop
--   In these networks activation functions (ƒ) are used to determine whether a neuron in the network is turned on or off
--   The data in feedback loop is included with the input of subsequent data
--   This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data such as text
+-   In these networks there are activation functions (ƒ) to determine whether a neuron in the network is turned on or off
+-   The data in the feedback loop is included with the input of subsequent data
+-   This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data
 :::
 
 ## What makes RNN different?
@@ -213,20 +215,20 @@ yi\* : actual value
 ::: nonincremental
 -   One of the main problems RNNs face is an exploding or vanishing gradient
 -   This can occur when a large amount of data is used
--   The weight in the feedback loop (W_h) becomes multiplied on itself over and over which will results in an extremely large or extremely small value
+-   The weight in the feedback loop (W_h) becomes multiplied on itself over and over which results in an extremely large or extremely small value
 :::
 
 ## Limitiations
 
 ::: nonincremental
--   For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of ten (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big which in turn results in overfitting.
+-   For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of ten (59049). When applied to larger data sets this number can become much larger. This value is then used in the gradient descent calculation resulting in an optimization step that is way too big which in turn results in overfitting.
 -   For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small.
 :::
 
 ## Solution to exploding and vanishing gradient
 
 ::: nonincremental
--   A common solution to exploding and vanishing gradient is a Long Short-Term Memory (LSTM) cell
+-   A common solution to an exploding or vanishing gradient is a Long Short-Term Memory (LSTM) cell
 -   These cells are located in the feedback loop and contain three gates within the cell
     1.  Input gate: determines which information is stored in the cell
 
@@ -252,8 +254,8 @@ yi\* : actual value
 ## RNN Continued
 
 ::: nonincremental
--   LSTMs maintain a cell state as a result of the calculations from the equations below along with the sigmoid and the general gate equation
--   This state is what provides the "memory" which makes it useful in named entity recognition
+-   LSTMs maintain a cell state as a result of the calculations of the equations in the next slide along with the sigmoid and the general gate equation
+-   This state is what provides the "memory" which is what makes it useful in named entity recognition
 -   Using LSTM cells in recurrent neural networks allows the network to be applied to large datasets which is very beneficial in the context of named entity recognition
 :::
 
@@ -296,7 +298,7 @@ if response.status_code == 200:
     data = response.json()
 ```
 
-## Parse data into dictionary to manipulate data.
+## Parse data into a dictionary to manipulate data.
 
 ``` python
 training_data = []
@@ -403,7 +405,7 @@ from tensorflow.keras.utils import to_categorical
 
 ## RNN Code
 
--   Using the dataframe created before a vocabulary of words and labels was created and then converted into indices
+-   From the dataframe a vocabulary of words and labels was created and then converted into indices
 
 -   The sequences are then padded to a maximum length and then converted to one-hot encoded vectors
 

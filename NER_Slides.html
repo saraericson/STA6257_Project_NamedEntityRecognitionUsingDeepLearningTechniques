@@ -475,17 +475,17 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <h2>Transformer Methods</h2>
 <div>
 <ul>
-<li class="fragment"><p>Scaled Dot-Product Attention formula<br>
+<li><p>Scaled Dot-Product Attention formula<br>
 <br>
 <span class="math inline">\(\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V\)</span><br>
 </p></li>
-<li class="fragment"><p>The Single (Masked) Self- or Cross-Attention Head Formula <span class="math inline">\(\begin{align*}\text{Attention}(Q, K, V) &amp;= \text{softmax}\left(\frac{QK^\top + \text{Mask}}{\sqrt{d_k}}\right)V \\\end{align*}\)</span></p></li>
+<li><p>The Single (Masked) Self- or Cross-Attention Head Formula <span class="math inline">\(\begin{align*}\text{Attention}(Q, K, V) &amp;= \text{softmax}\left(\frac{QK^\top + \text{Mask}}{\sqrt{d_k}}\right)V \\\end{align*}\)</span></p></li>
 </ul>
 </div>
 </section>
 <section id="transformer---how-to-do-it" class="slide level2">
 <h2>Transformer - How to do it?</h2>
-<div class="incrememtal">
+<div class="nonincrememtal">
 <ol type="1">
 <li><p>Annotated Dataset for Training</p>
 <ul>
@@ -511,8 +511,8 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <h2>Transformer Limitations</h2>
 <div>
 <ul>
-<li class="fragment"><p>Standard language models are unidirectional, restricting pre-training architecture options and limiting context awareness.</p></li>
-<li class="fragment"><p>Transformers have high computational complexity due to numerous parameters, requiring significant resources and specialized hardware for deep models and long sequences.</p></li>
+<li><p>Standard language models are unidirectional, restricting pre-training architecture options and limiting context awareness.</p></li>
+<li><p>Transformers have high computational complexity due to numerous parameters, requiring significant resources and specialized hardware for deep models and long sequences.</p></li>
 </ul>
 </div>
 </section>
@@ -521,11 +521,11 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <div>
 <p>We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens.</p>
 <ul>
-<li class="fragment"><p>Labels:</p>
+<li><p>Labels:</p>
 <ul>
-<li class="fragment">Medical condition names (example: influenza, headache, malaria)</li>
-<li class="fragment">Medicine names (example : aspirin, penicillin, ribavirin, methotrexate)</li>
-<li class="fragment">Pathogens ( example: Corona Virus, Zika Virus, cynobacteria, E. Coli)</li>
+<li>Medical condition names (example: influenza, headache, malaria)</li>
+<li>Medicine names (example : aspirin, penicillin, ribavirin, methotrexate)</li>
+<li>Pathogens ( example: Corona Virus, Zika Virus, cynobacteria, E. Coli)</li>
 </ul></li>
 </ul>
 </div>
@@ -604,20 +604,20 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 </div>
 </div>
 </section>
-<section id="what-is-a-recurrent-neural-network-rnn-starting-with-a-neural-network" class="slide level2">
-<h2>What is a Recurrent Neural Network (RNN) starting with a Neural Network</h2>
+<section id="a-basic-neural-network" class="slide level2">
+<h2>A basic neural network</h2>
 <div>
 <ul>
-<li class="fragment">A basic neural network has an input layer, a hidden layer or layers, and an output layer</li>
-<li class="fragment">Between the layers are weights and biases that are used in the calculation of the output</li>
-<li class="fragment">The network is optimized using back propagation and a gradient descent algorithm</li>
-<li class="fragment">Back propagation is used to find the gradient of a parameter</li>
-<li class="fragment">A gradient descent algorithm is used to find values that minimize a loss function (such as error)</li>
+<li>A basic neural network has an input layer, a hidden layer or layers, and an output layer</li>
+<li>Between the layers are weights and biases that are used in the calculations between layers</li>
+<li>The network is optimized using back propagation and a gradient descent algorithm</li>
+<li>Back propagation is used to find the gradient of a parameter</li>
+<li>A gradient descent algorithm is used to find values that minimize a loss function</li>
 </ul>
 </div>
 </section>
-<section id="what-is-a-recurrent-neural-network-rnn-starting-with-a-neural-network-1" class="slide level2">
-<h2>What is a Recurrent Neural Network (RNN) starting with a Neural Network</h2>
+<section id="basic-neural-network-equations" class="slide level2">
+<h2>Basic neural network equations</h2>
 <div>
 <p>Example of a Loss function (Mean Squared Error):<br>
 <span class="math inline">\(\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2\)</span><br>
@@ -628,6 +628,7 @@ N : number of vector entries with yi in output vector</p>
 <p>yi* : actual value</p>
 <p>𝛼 : learning rate</p>
 <p>𝜽j : input</p>
+<p>J(𝜽) : parameter</p>
 </div>
 </section>
 <section id="what-makes-rnn-different" class="slide level2">
@@ -635,9 +636,9 @@ N : number of vector entries with yi in output vector</p>
 <div>
 <ul>
 <li>A recurrent neural network is similar to a basic neural network but with the addition of a feedback loop</li>
-<li>In these networks activation functions (ƒ) are used to determine whether a neuron in the network is turned on or off</li>
-<li>The data in feedback loop is included with the input of subsequent data</li>
-<li>This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data such as text</li>
+<li>In these networks there are activation functions (ƒ) to determine whether a neuron in the network is turned on or off</li>
+<li>The data in the feedback loop is included with the input of subsequent data</li>
+<li>This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data</li>
 </ul>
 </div>
 </section>
@@ -657,7 +658,7 @@ N : number of vector entries with yi in output vector</p>
 <ul>
 <li>One of the main problems RNNs face is an exploding or vanishing gradient</li>
 <li>This can occur when a large amount of data is used</li>
-<li>The weight in the feedback loop (W_h) becomes multiplied on itself over and over which will results in an extremely large or extremely small value</li>
+<li>The weight in the feedback loop (W_h) becomes multiplied on itself over and over which results in an extremely large or extremely small value</li>
 </ul>
 </div>
 </section>
@@ -665,7 +666,7 @@ N : number of vector entries with yi in output vector</p>
 <h2>Limitiations</h2>
 <div>
 <ul>
-<li>For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of ten (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big which in turn results in overfitting.</li>
+<li>For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of ten (59049). When applied to larger data sets this number can become much larger. This value is then used in the gradient descent calculation resulting in an optimization step that is way too big which in turn results in overfitting.</li>
 <li>For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small.</li>
 </ul>
 </div>
@@ -674,7 +675,7 @@ N : number of vector entries with yi in output vector</p>
 <h2>Solution to exploding and vanishing gradient</h2>
 <div>
 <ul>
-<li>A common solution to exploding and vanishing gradient is a Long Short-Term Memory (LSTM) cell</li>
+<li>A common solution to an exploding or vanishing gradient is a Long Short-Term Memory (LSTM) cell</li>
 <li>These cells are located in the feedback loop and contain three gates within the cell
 <ol type="1">
 <li><p>Input gate: determines which information is stored in the cell</p></li>
@@ -700,8 +701,8 @@ N : number of vector entries with yi in output vector</p>
 <h2>RNN Continued</h2>
 <div>
 <ul>
-<li>LSTMs maintain a cell state as a result of the calculations from the equations below along with the sigmoid and the general gate equation</li>
-<li>This state is what provides the “memory” which makes it useful in named entity recognition</li>
+<li>LSTMs maintain a cell state as a result of the calculations of the equations in the next slide along with the sigmoid and the general gate equation</li>
+<li>This state is what provides the “memory” which is what makes it useful in named entity recognition</li>
 <li>Using LSTM cells in recurrent neural networks allows the network to be applied to large datasets which is very beneficial in the context of named entity recognition</li>
 </ul>
 </div>
@@ -728,8 +729,8 @@ N : number of vector entries with yi in output vector</p>
 </ul>
 </div>
 </section>
-<section id="parse-data-into-dictionary-to-manipulate-data." class="slide level2">
-<h2>Parse data into dictionary to manipulate data.</h2>
+<section id="parse-data-into-a-dictionary-to-manipulate-data." class="slide level2">
+<h2>Parse data into a dictionary to manipulate data.</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>training_data <span class="op">=</span> []</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="cf">for</span> example <span class="kw">in</span> data[<span class="st">'examples'</span>]:</span>
 <span id="cb1-3"><a href="#cb1-3"></a>  temp_dict <span class="op">=</span> {}</span>
@@ -788,7 +789,7 @@ N : number of vector entries with yi in output vector</p>
 <section id="rnn-code" class="slide level2">
 <h2>RNN Code</h2>
 <ul>
-<li><p>Using the dataframe created before a vocabulary of words and labels was created and then converted into indices</p></li>
+<li><p>From the dataframe a vocabulary of words and labels was created and then converted into indices</p></li>
 <li><p>The sequences are then padded to a maximum length and then converted to one-hot encoded vectors</p></li>
 <li><p>A one-hot encoded vector is a binary vector in which the label is encoded as 1 and everything else that is not the label is encoded as 0</p></li>
 <li><p>This is necessary to train the model with tensorflow</p></li>
