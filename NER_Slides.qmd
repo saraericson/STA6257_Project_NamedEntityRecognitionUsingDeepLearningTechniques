@@ -11,7 +11,7 @@ editor: visual
 
 ## NER, what is it?
 
-::: incremental
+::: nonincremental
 -   Named Entity Recognition (NER) is a task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text.
     -   This means identifying and classifying entities into categories that are predefined (person, place, etc.)
 -   Biomedical NER is the task of text mining to specifically biomedical texts to determine entity types.
@@ -20,7 +20,7 @@ editor: visual
 
 ## Purpose of this review
 
-::: incremental
+::: nonincremental
 -   We are testing different deep learning techniques and their effectiveness of NER on data containing information on Medical Conditions, Medicine Names, and Pathogens.
 
 -   The methods we chose are:
@@ -31,14 +31,24 @@ editor: visual
 
 ## Limitations
 
-::: incremental
+::: nonincremental
 -   Current NER techniques have major limitations being that the standard language models are unidirectional, operating in a single direction, and thus limit the choice of architecture that can be used for pre-training.
 -   While the deep learning techniques we have chosen are not perfect, they do directly address this major limitation and we will show their effectiveness moving forward.
 :::
 
+## Limitations
+
+::: nonincremental
+-   Limitations of our chosen techniques:
+
+    -   Transformer model: The size of the training data can be a limitation here. If there is not enough training data it can make the model less effective.
+
+    -   RNN: RNN's are prone to over fitting which is especially true when there is a small dataset
+:::
+
 ## What is Transformer Model?
 
-::: incremental
+::: nonincremental
 -   The Transformer model is a neural network architecture designed for sequence-to-sequence tasks such as machine translation.
 
 -   The model's key innovation is the self-attention mechanism, which allows it to weight the importance of different words in the input sequence.
@@ -120,7 +130,7 @@ We will use the dataset called corona2 from Kaggle to identify Natural Entity Re
 
 ::: incremental
 | Column Name | Type    | Description                                         |
-|-------------------|-------------------|----------------------------------|
+|-------------|---------|-----------------------------------------------------|
 | Text        | string  | Sentence including the labels                       |
 | Starts      | integer | Position on where the label starts                  |
 | Ends        | integer | Position on where the label ends                    |
@@ -168,12 +178,10 @@ Text: Buprenorphine has been shown experimentally (1982--1995) to be effective a
 ## What is a Recurrent Neural Network (RNN) starting with a Neural Network
 
 ::: nonincremental
-Example of a Loss function (Mean Squared Error)\
+Example of a Loss function (Mean Squared Error):\
 $\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2$\
-\
-Gradient Descent Algorithm\
+Gradient Descent Algorithm:\
 $\text{𝜽}_j =𝜽_j - 𝛼 (∂J(𝜽) / ∂𝜽_j)$\
-
 N : number of vector entries with yi in output vector
 
 yi : predicted value
@@ -187,7 +195,7 @@ yi\* : actual value
 
 ## What makes RNN different?
 
-::: incremental
+::: nonincremental
 -   A recurrent neural network is similar to a basic neural network but with the addition of a feedback loop
 -   In these networks activation functions (ƒ) are used to determine whether a neuron in the network is turned on or off
 -   The data in feedback loop is included with the input of subsequent data
@@ -197,12 +205,12 @@ yi\* : actual value
 ## What makes RNN different?
 
 ::: nonincremental
-    ![](images/Screen%20Shot%202023-04-26%20at%206.14.17%20PM.png){width="562"}
+![](images/Screen%20Shot%202023-04-26%20at%206.14.17%20PM-01.png){fig-align="center" width="462"}
 :::
 
 ## Limitations of RNN
 
-::: incremental
+::: nonincremental
 -   One of the main problems RNNs face is an exploding or vanishing gradient
 -   This can occur when a large amount of data is used
 -   The weight in the feedback loop (W_h) becomes multiplied on itself over and over which will results in an extremely large or extremely small value
@@ -211,13 +219,13 @@ yi\* : actual value
 ## Limitiations
 
 ::: nonincremental
--   For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of then (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big
--   For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small
+-   For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of ten (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big which in turn results in overfitting.
+-   For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small.
 :::
 
 ## Solution to exploding and vanishing gradient
 
-::: incremental
+::: nonincremental
 -   A common solution to exploding and vanishing gradient is a Long Short-Term Memory (LSTM) cell
 -   These cells are located in the feedback loop and contain three gates within the cell
     1.  Input gate: determines which information is stored in the cell
@@ -232,23 +240,13 @@ yi\* : actual value
 ::: nonincremental
 -   These gates use a sigmoid function which outputs a value between zero and one
 
--   Zero blocks all information and one allows all information through
+-   0 blocks all information and 1 allows all information through
 
-    Sigmoid:\
-    $\text{f(x)} = {1/(1+e^{-x})}$\
+    Sigmoid: $\text{f(x)} = {1/(1+e^{-x})}$
 
-    General gate equation:\
-    $\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)$\
+    General gate equation: $\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)$
 
-    x : input
-
-    𝝈 : sigmoid function
-
-    w : weight
-
-    h : information of i-th iteration
-
-    b : bias
+    x : input, 𝝈 : sigmoid function, w : weight, h : information of i-th iteration, b : bias
 :::
 
 ## RNN Continued
@@ -262,20 +260,10 @@ yi\* : actual value
 ## Equations for LSTMs
 
 ::: nonincremental
-    Possible cell state at i-th iteration:\
-    $\text{c}_i^*=tanh(w[h_{i-1}, x_i] + b)$\
-    \
-    Cell state:\
-    $\text{c}_i = (forget gate * c_{i-1}) + (input gate * c_i^* )$\
-    \
-    Output:\
-    $\text{h}_i = (output gate * tanh(c_i))$\
-    \
-    tanh:\
-    $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\
+![](images/Screen%20Shot%202023-04-26%20at%209.12.04%20PM.png){fig-align="center"}
 :::
 
-## Libraries needed
+## Libraries needed for data manipulation
 
 ::: nonincremental
 -   **nbclient** : Executes Jupyter notebooks programmatically
@@ -306,12 +294,9 @@ response = requests.get(url)
 if response.status_code == 200:
     # Parse the JSON data from the response
     data = response.json()
-    print('Success, the Json data was stored into the data variable')
-else:
-    print('Failed to fetch JSON data:', response.status_code)
 ```
 
-## Parse json data into dictionary to manipulate data.
+## Parse data into dictionary to manipulate data.
 
 ``` python
 training_data = []
@@ -386,10 +371,15 @@ for example in training_data:
 
 # Create a DataFrame from the lists
 df = pd.DataFrame({'text': texts, 'start': starts, 'end': ends, 'label': labels})
-df.head(5)
 ```
 
-## RNN Results
+## First five entries in dataframe
+
+::: nonincremental
+![](images/Screen%20Shot%202023-04-26%20at%209.22.16%20PM-01.png){fig-align="center" width="503"}
+:::
+
+## RNN Libraries
 
 Load required libraries for the RNN.
 
@@ -411,7 +401,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 ```
 
-## RNN Results Continued
+## RNN Code
 
 -   Using the dataframe created before a vocabulary of words and labels was created and then converted into indices
 
@@ -485,16 +475,14 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 ## Lastly the model is fitted and the accuracy is calculated
 
-::: incremental
+::: nonincremental
 The RNN model's accuracy is 0.9967
-
-``` python
-model.fit(X, y, batch_size=32, epochs=10)
-```
 
 ```{python}
 model.fit(X, y, batch_size=32, epochs=10, verbose=2)
 ```
+
+![](images/Screen%20Shot%202023-04-26%20at%208.56.26%20PM.png){fig-align="center" width="413"}
 :::
 
 ## Conclusion
@@ -503,4 +491,15 @@ model.fit(X, y, batch_size=32, epochs=10, verbose=2)
 -   NER is a key NLP task that involves identifying named entities in a text.
 -   Deep learning techniques have become more mainstream in the NER field due to their major advantages.
 -   The techniques we have chose, RNN and Transformer Model, have shown this to be true for various situations.
+:::
+
+## Conclusion
+
+::: incremental
+-   The accuracy of our models were:
+
+    -   Transformer Model: 0.9375
+    -   RNN: 0.9967
+
+-   This shoes that when doing NER for our chosen dataset, RNN was more effective after training, but that both are over 90% accurate given the data that we have used
 :::

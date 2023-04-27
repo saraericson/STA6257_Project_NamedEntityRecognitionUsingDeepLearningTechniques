@@ -382,9 +382,6 @@
       margin-right: 0; 
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -406,12 +403,12 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <h2>NER, what is it?</h2>
 <div>
 <ul>
-<li class="fragment">Named Entity Recognition (NER) is a task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text.
+<li>Named Entity Recognition (NER) is a task in Natural Language Processing (NLP) that involves identifying and extracting named entities from unstructured text.
 <ul>
-<li class="fragment">This means identifying and classifying entities into categories that are predefined (person, place, etc.)</li>
+<li>This means identifying and classifying entities into categories that are predefined (person, place, etc.)</li>
 </ul></li>
-<li class="fragment">Biomedical NER is the task of text mining to specifically biomedical texts to determine entity types.</li>
-<li class="fragment">Similarly, medical NER tasks mine specifically medical texts for entity types.</li>
+<li>Biomedical NER is the task of text mining to specifically biomedical texts to determine entity types.</li>
+<li>Similarly, medical NER tasks mine specifically medical texts for entity types.</li>
 </ul>
 </div>
 </section>
@@ -419,11 +416,11 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <h2>Purpose of this review</h2>
 <div>
 <ul>
-<li class="fragment"><p>We are testing different deep learning techniques and their effectiveness of NER on data containing information on Medical Conditions, Medicine Names, and Pathogens.</p></li>
-<li class="fragment"><p>The methods we chose are:</p>
+<li><p>We are testing different deep learning techniques and their effectiveness of NER on data containing information on Medical Conditions, Medicine Names, and Pathogens.</p></li>
+<li><p>The methods we chose are:</p>
 <ul>
-<li class="fragment">Recurrent Neural Network (RNN): a method of deep learning that is used for sequential data and time-series data.</li>
-<li class="fragment">Transformer Model: a model designed for sequence-to-sequence tasks, such as machine translation, and is known for its ability to process input sequences in parallel rather than sequentially.</li>
+<li>Recurrent Neural Network (RNN): a method of deep learning that is used for sequential data and time-series data.</li>
+<li>Transformer Model: a model designed for sequence-to-sequence tasks, such as machine translation, and is known for its ability to process input sequences in parallel rather than sequentially.</li>
 </ul></li>
 </ul>
 </div>
@@ -432,8 +429,20 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <h2>Limitations</h2>
 <div>
 <ul>
-<li class="fragment">Current NER techniques have major limitations being that the standard language models are unidirectional, operating in a single direction, and thus limit the choice of architecture that can be used for pre-training.</li>
-<li class="fragment">While the deep learning techniques we have chosen are not perfect, they do directly address this major limitation and we will show their effectiveness moving forward.</li>
+<li>Current NER techniques have major limitations being that the standard language models are unidirectional, operating in a single direction, and thus limit the choice of architecture that can be used for pre-training.</li>
+<li>While the deep learning techniques we have chosen are not perfect, they do directly address this major limitation and we will show their effectiveness moving forward.</li>
+</ul>
+</div>
+</section>
+<section id="limitations-1" class="slide level2">
+<h2>Limitations</h2>
+<div>
+<ul>
+<li><p>Limitations of our chosen techniques:</p>
+<ul>
+<li><p>Transformer model: The size of the training data can be a limitation here. If there is not enough training data it can make the model less effective.</p></li>
+<li><p>RNN: RNN’s are prone to over fitting which is especially true when there is a small dataset</p></li>
+</ul></li>
 </ul>
 </div>
 </section>
@@ -441,9 +450,9 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <h2>What is Transformer Model?</h2>
 <div>
 <ul>
-<li class="fragment"><p>The Transformer model is a neural network architecture designed for sequence-to-sequence tasks such as machine translation.</p></li>
-<li class="fragment"><p>The model’s key innovation is the self-attention mechanism, which allows it to weight the importance of different words in the input sequence.</p></li>
-<li class="fragment"><p>Self-attention enables the model to capture long-range dependencies and handle complex language structures effectively.</p></li>
+<li><p>The Transformer model is a neural network architecture designed for sequence-to-sequence tasks such as machine translation.</p></li>
+<li><p>The model’s key innovation is the self-attention mechanism, which allows it to weight the importance of different words in the input sequence.</p></li>
+<li><p>Self-attention enables the model to capture long-range dependencies and handle complex language structures effectively.</p></li>
 </ul>
 </div>
 </section>
@@ -526,9 +535,9 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <div>
 <table>
 <colgroup>
-<col style="width: 26%">
-<col style="width: 26%">
-<col style="width: 47%">
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 70%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -610,13 +619,11 @@ Sara Ericson, Andrew Campbell, Jorge Sanchez
 <section id="what-is-a-recurrent-neural-network-rnn-starting-with-a-neural-network-1" class="slide level2">
 <h2>What is a Recurrent Neural Network (RNN) starting with a Neural Network</h2>
 <div>
-<p>Example of a Loss function (Mean Squared Error)<br>
+<p>Example of a Loss function (Mean Squared Error):<br>
 <span class="math inline">\(\text{L(𝜽)} = (1/N) * ∑(y_i - y_i^*)^2\)</span><br>
-<br>
-Gradient Descent Algorithm<br>
+Gradient Descent Algorithm:<br>
 <span class="math inline">\(\text{𝜽}_j =𝜽_j - 𝛼 (∂J(𝜽) / ∂𝜽_j)\)</span><br>
-</p>
-<p>N : number of vector entries with yi in output vector</p>
+N : number of vector entries with yi in output vector</p>
 <p>yi : predicted value</p>
 <p>yi* : actual value</p>
 <p>𝛼 : learning rate</p>
@@ -627,26 +634,30 @@ Gradient Descent Algorithm<br>
 <h2>What makes RNN different?</h2>
 <div>
 <ul>
-<li class="fragment">A recurrent neural network is similar to a basic neural network but with the addition of a feedback loop</li>
-<li class="fragment">In these networks activation functions (ƒ) are used to determine whether a neuron in the network is turned on or off</li>
-<li class="fragment">The data in feedback loop is included with the input of subsequent data</li>
-<li class="fragment">This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data such as text</li>
+<li>A recurrent neural network is similar to a basic neural network but with the addition of a feedback loop</li>
+<li>In these networks activation functions (ƒ) are used to determine whether a neuron in the network is turned on or off</li>
+<li>The data in feedback loop is included with the input of subsequent data</li>
+<li>This allows for past data to influence the calculations of future outputs which is why RNNs are great for sequential data such as text</li>
 </ul>
 </div>
 </section>
 <section id="what-makes-rnn-different-1" class="slide level2">
 <h2>What makes RNN different?</h2>
 <div>
-<pre><code>![](images/Screen%20Shot%202023-04-26%20at%206.14.17%20PM.png){width="562"}</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Screen%20Shot%202023-04-26%20at%206.14.17%20PM-01.png" width="462"></p>
+</figure>
+</div>
 </div>
 </section>
 <section id="limitations-of-rnn" class="slide level2">
 <h2>Limitations of RNN</h2>
 <div>
 <ul>
-<li class="fragment">One of the main problems RNNs face is an exploding or vanishing gradient</li>
-<li class="fragment">This can occur when a large amount of data is used</li>
-<li class="fragment">The weight in the feedback loop (W_h) becomes multiplied on itself over and over which will results in an extremely large or extremely small value</li>
+<li>One of the main problems RNNs face is an exploding or vanishing gradient</li>
+<li>This can occur when a large amount of data is used</li>
+<li>The weight in the feedback loop (W_h) becomes multiplied on itself over and over which will results in an extremely large or extremely small value</li>
 </ul>
 </div>
 </section>
@@ -654,8 +665,8 @@ Gradient Descent Algorithm<br>
 <h2>Limitiations</h2>
 <div>
 <ul>
-<li>For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of then (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big</li>
-<li>For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small</li>
+<li>For example if the weight is 3 and there are 10 data points the weight will end up being 3 to the power of ten (59049). When applied to larger data sets this number can become much larger. This number is then used in the gradient descent calculation resulting in an optimization step that is way too big which in turn results in overfitting.</li>
+<li>For smaller weights such as 0.5 with 10 data points the weight will be 0.000977. This will result in an optimization step that is way too small.</li>
 </ul>
 </div>
 </section>
@@ -663,12 +674,12 @@ Gradient Descent Algorithm<br>
 <h2>Solution to exploding and vanishing gradient</h2>
 <div>
 <ul>
-<li class="fragment">A common solution to exploding and vanishing gradient is a Long Short-Term Memory (LSTM) cell</li>
-<li class="fragment">These cells are located in the feedback loop and contain three gates within the cell
+<li>A common solution to exploding and vanishing gradient is a Long Short-Term Memory (LSTM) cell</li>
+<li>These cells are located in the feedback loop and contain three gates within the cell
 <ol type="1">
-<li class="fragment"><p>Input gate: determines which information is stored in the cell</p></li>
-<li class="fragment"><p>Forget gate: determines which information will be discarded</p></li>
-<li class="fragment"><p>Output gate: provides the activation for the final output</p></li>
+<li><p>Input gate: determines which information is stored in the cell</p></li>
+<li><p>Forget gate: determines which information will be discarded</p></li>
+<li><p>Output gate: provides the activation for the final output</p></li>
 </ol></li>
 </ul>
 </div>
@@ -678,18 +689,10 @@ Gradient Descent Algorithm<br>
 <div>
 <ul>
 <li><p>These gates use a sigmoid function which outputs a value between zero and one</p></li>
-<li><p>Zero blocks all information and one allows all information through</p>
-<p>Sigmoid:<br>
-<span class="math inline">\(\text{f(x)} = {1/(1+e^{-x})}\)</span><br>
-</p>
-<p>General gate equation:<br>
-<span class="math inline">\(\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)\)</span><br>
-</p>
-<p>x : input</p>
-<p>𝝈 : sigmoid function</p>
-<p>w : weight</p>
-<p>h : information of i-th iteration</p>
-<p>b : bias</p></li>
+<li><p>0 blocks all information and 1 allows all information through</p>
+<p>Sigmoid: <span class="math inline">\(\text{f(x)} = {1/(1+e^{-x})}\)</span></p>
+<p>General gate equation: <span class="math inline">\(\text{g}_i = 𝝈(w[h_{i-1}, x_i] + b)\)</span></p>
+<p>x : input, 𝝈 : sigmoid function, w : weight, h : information of i-th iteration, b : bias</p></li>
 </ul>
 </div>
 </section>
@@ -706,21 +709,15 @@ Gradient Descent Algorithm<br>
 <section id="equations-for-lstms" class="slide level2">
 <h2>Equations for LSTMs</h2>
 <div>
-<pre><code>Possible cell state at i-th iteration:\
-$\text{c}_i^*=tanh(w[h_{i-1}, x_i] + b)$\
-\
-Cell state:\
-$\text{c}_i = (forget gate * c_{i-1}) + (input gate * c_i^* )$\
-\
-Output:\
-$\text{h}_i = (output gate * tanh(c_i))$\
-\
-tanh:\
-$\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Screen%20Shot%202023-04-26%20at%209.12.04%20PM.png"></p>
+</figure>
+</div>
 </div>
 </section>
-<section id="libraries-needed" class="slide level2">
-<h2>Libraries needed</h2>
+<section id="libraries-needed-for-data-manipulation" class="slide level2">
+<h2>Libraries needed for data manipulation</h2>
 <div>
 <ul>
 <li><p><strong>nbclient</strong> : Executes Jupyter notebooks programmatically</p></li>
@@ -730,129 +727,66 @@ $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\</code></pre>
 <li><p><strong>plotly.express</strong> : Creates interactive data visualizations with a simple interface</p></li>
 </ul>
 </div>
-<div class="cell" data-execution_count="2">
-<div class="cell-output cell-output-stdout">
-<pre><code>Success, the Json data was stored into the data variable</code></pre>
-</div>
-</div>
 </section>
-<section id="parse-json-data-into-dictionary-to-manipulate-data." class="slide level2">
-<h2>Parse json data into dictionary to manipulate data.</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>training_data <span class="op">=</span> []</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="cf">for</span> example <span class="kw">in</span> data[<span class="st">'examples'</span>]:</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  temp_dict <span class="op">=</span> {}</span>
-<span id="cb4-4"><a href="#cb4-4"></a>  temp_dict[<span class="st">'text'</span>] <span class="op">=</span> example[<span class="st">'content'</span>]</span>
-<span id="cb4-5"><a href="#cb4-5"></a>  temp_dict[<span class="st">'entities'</span>] <span class="op">=</span> []</span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="cf">for</span> annotation <span class="kw">in</span> example[<span class="st">'annotations'</span>]:</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    start <span class="op">=</span> annotation[<span class="st">'start'</span>]</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    end <span class="op">=</span> annotation[<span class="st">'end'</span>]</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    label <span class="op">=</span> annotation[<span class="st">'tag_name'</span>].upper()</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    temp_dict[<span class="st">'entities'</span>].append((start, end, label))</span>
-<span id="cb4-11"><a href="#cb4-11"></a>  training_data.append(temp_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="parse-data-into-dictionary-to-manipulate-data." class="slide level2">
+<h2>Parse data into dictionary to manipulate data.</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>training_data <span class="op">=</span> []</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="cf">for</span> example <span class="kw">in</span> data[<span class="st">'examples'</span>]:</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  temp_dict <span class="op">=</span> {}</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  temp_dict[<span class="st">'text'</span>] <span class="op">=</span> example[<span class="st">'content'</span>]</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  temp_dict[<span class="st">'entities'</span>] <span class="op">=</span> []</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="cf">for</span> annotation <span class="kw">in</span> example[<span class="st">'annotations'</span>]:</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    start <span class="op">=</span> annotation[<span class="st">'start'</span>]</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    end <span class="op">=</span> annotation[<span class="st">'end'</span>]</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    label <span class="op">=</span> annotation[<span class="st">'tag_name'</span>].upper()</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    temp_dict[<span class="st">'entities'</span>].append((start, end, label))</span>
+<span id="cb1-11"><a href="#cb1-11"></a>  training_data.append(temp_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="convert-data-from-dictionary-to-dataframe" class="slide level2">
 <h2>Convert data from Dictionary to Dataframe</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Initialing empty lists to store the data for the DataFrame</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>texts <span class="op">=</span> []</span>
-<span id="cb5-3"><a href="#cb5-3"></a>starts <span class="op">=</span> []</span>
-<span id="cb5-4"><a href="#cb5-4"></a>ends <span class="op">=</span> []</span>
-<span id="cb5-5"><a href="#cb5-5"></a>labels <span class="op">=</span> []</span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co"># Iterate through the training_data to extract individual entity annotations</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="cf">for</span> example <span class="kw">in</span> training_data:</span>
-<span id="cb5-9"><a href="#cb5-9"></a>    text <span class="op">=</span> example[<span class="st">'text'</span>]</span>
-<span id="cb5-10"><a href="#cb5-10"></a>    <span class="cf">for</span> entity <span class="kw">in</span> example[<span class="st">'entities'</span>]:</span>
-<span id="cb5-11"><a href="#cb5-11"></a>        start, end, label <span class="op">=</span> entity</span>
-<span id="cb5-12"><a href="#cb5-12"></a>        <span class="co"># Append data to the lists</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>        texts.append(text)</span>
-<span id="cb5-14"><a href="#cb5-14"></a>        starts.append(start)</span>
-<span id="cb5-15"><a href="#cb5-15"></a>        ends.append(end)</span>
-<span id="cb5-16"><a href="#cb5-16"></a>        labels.append(label)</span>
-<span id="cb5-17"><a href="#cb5-17"></a></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="co"># Create a DataFrame from the lists</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'text'</span>: texts, <span class="st">'start'</span>: starts, <span class="st">'end'</span>: ends, <span class="st">'label'</span>: labels})</span>
-<span id="cb5-20"><a href="#cb5-20"></a>df.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="4">
-
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Initialing empty lists to store the data for the DataFrame</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>texts <span class="op">=</span> []</span>
+<span id="cb2-3"><a href="#cb2-3"></a>starts <span class="op">=</span> []</span>
+<span id="cb2-4"><a href="#cb2-4"></a>ends <span class="op">=</span> []</span>
+<span id="cb2-5"><a href="#cb2-5"></a>labels <span class="op">=</span> []</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># Iterate through the training_data to extract individual entity annotations</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="cf">for</span> example <span class="kw">in</span> training_data:</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    text <span class="op">=</span> example[<span class="st">'text'</span>]</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="cf">for</span> entity <span class="kw">in</span> example[<span class="st">'entities'</span>]:</span>
+<span id="cb2-11"><a href="#cb2-11"></a>        start, end, label <span class="op">=</span> entity</span>
+<span id="cb2-12"><a href="#cb2-12"></a>        <span class="co"># Append data to the lists</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>        texts.append(text)</span>
+<span id="cb2-14"><a href="#cb2-14"></a>        starts.append(start)</span>
+<span id="cb2-15"><a href="#cb2-15"></a>        ends.append(end)</span>
+<span id="cb2-16"><a href="#cb2-16"></a>        labels.append(label)</span>
+<span id="cb2-17"><a href="#cb2-17"></a></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co"># Create a DataFrame from the lists</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'text'</span>: texts, <span class="st">'start'</span>: starts, <span class="st">'end'</span>: ends, <span class="st">'label'</span>: labels})</span>
+<span id="cb2-20"><a href="#cb2-20"></a>df.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="first-five-entries-in-dataframe" class="slide level2">
+<h2>First five entries in dataframe</h2>
 <div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>text</th>
-      <th>start</th>
-      <th>end</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>While bismuth compounds (Pepto-Bismol) decreas...</td>
-      <td>360</td>
-      <td>371</td>
-      <td>MEDICINE</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>While bismuth compounds (Pepto-Bismol) decreas...</td>
-      <td>383</td>
-      <td>408</td>
-      <td>MEDICINE</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>While bismuth compounds (Pepto-Bismol) decreas...</td>
-      <td>104</td>
-      <td>112</td>
-      <td>MEDICALCONDITION</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>While bismuth compounds (Pepto-Bismol) decreas...</td>
-      <td>679</td>
-      <td>689</td>
-      <td>MEDICINE</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>While bismuth compounds (Pepto-Bismol) decreas...</td>
-      <td>6</td>
-      <td>23</td>
-      <td>MEDICINE</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Screen%20Shot%202023-04-26%20at%209.22.16%20PM-01.png" width="503"></p>
+</figure>
 </div>
 </div>
 </section>
-<section id="rnn-results" class="slide level2">
-<h2>RNN Results</h2>
+<section id="rnn-libraries" class="slide level2">
+<h2>RNN Libraries</h2>
 <p>Load required libraries for the RNN.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> LSTM, Dense, Dropout, TimeDistributed, Bidirectional</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="im">from</span> tensorflow.keras.preprocessing.sequence <span class="im">import</span> pad_sequences</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="im">from</span> tensorflow.keras.utils <span class="im">import</span> to_categorical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> LSTM, Dense, Dropout, TimeDistributed, Bidirectional</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="im">from</span> tensorflow.keras.preprocessing.sequence <span class="im">import</span> pad_sequences</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="im">from</span> tensorflow.keras.utils <span class="im">import</span> to_categorical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="rnn-results-continued" class="slide level2">
-<h2>RNN Results Continued</h2>
+<section id="rnn-code" class="slide level2">
+<h2>RNN Code</h2>
 <ul>
 <li><p>Using the dataframe created before a vocabulary of words and labels was created and then converted into indices</p></li>
 <li><p>The sequences are then padded to a maximum length and then converted to one-hot encoded vectors</p></li>
@@ -860,104 +794,108 @@ $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\</code></pre>
 <li><p>This is necessary to train the model with tensorflow</p></li>
 </ul>
 </section>
-<section id="rnn-code" class="slide level2">
+<section id="rnn-code-1" class="slide level2">
 <h2>RNN Code</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>words <span class="op">=</span> <span class="bu">set</span>(df[<span class="st">'text'</span>].values)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>word2idx <span class="op">=</span> {w: i <span class="op">+</span> <span class="dv">2</span> <span class="cf">for</span> i, w <span class="kw">in</span> <span class="bu">enumerate</span>(words)}</span>
-<span id="cb7-3"><a href="#cb7-3"></a>word2idx[<span class="st">'PAD'</span>] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>word2idx[<span class="st">'UNK'</span>] <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a></span>
-<span id="cb7-6"><a href="#cb7-6"></a>tags <span class="op">=</span> <span class="bu">set</span>(df[<span class="st">'label'</span>].values)</span>
-<span id="cb7-7"><a href="#cb7-7"></a>tag2idx <span class="op">=</span> {t: i <span class="op">+</span> <span class="dv">1</span> <span class="cf">for</span> i, t <span class="kw">in</span> <span class="bu">enumerate</span>(tags)}</span>
-<span id="cb7-8"><a href="#cb7-8"></a>tag2idx[<span class="st">'PAD'</span>] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a></span>
-<span id="cb7-10"><a href="#cb7-10"></a>X <span class="op">=</span> [[word2idx.get(w, <span class="dv">1</span>) <span class="cf">for</span> w <span class="kw">in</span> sentence.split()] <span class="cf">for</span> sentence <span class="kw">in</span> df[<span class="st">'text'</span>].values]</span>
-<span id="cb7-11"><a href="#cb7-11"></a>y <span class="op">=</span> [[tag2idx[t] <span class="cf">for</span> t <span class="kw">in</span> sentence.split()] <span class="cf">for</span> sentence <span class="kw">in</span> df[<span class="st">'label'</span>].values]</span>
-<span id="cb7-12"><a href="#cb7-12"></a></span>
-<span id="cb7-13"><a href="#cb7-13"></a>maxlen <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(x) <span class="cf">for</span> x <span class="kw">in</span> X)</span>
-<span id="cb7-14"><a href="#cb7-14"></a>X <span class="op">=</span> pad_sequences(X, padding<span class="op">=</span><span class="st">'post'</span>, maxlen<span class="op">=</span>maxlen)</span>
-<span id="cb7-15"><a href="#cb7-15"></a>y <span class="op">=</span> pad_sequences(y, padding<span class="op">=</span><span class="st">'post'</span>, maxlen<span class="op">=</span>maxlen)</span>
-<span id="cb7-16"><a href="#cb7-16"></a>y <span class="op">=</span> to_categorical(y, num_classes<span class="op">=</span><span class="bu">len</span>(tag2idx))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>words <span class="op">=</span> <span class="bu">set</span>(df[<span class="st">'text'</span>].values)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>word2idx <span class="op">=</span> {w: i <span class="op">+</span> <span class="dv">2</span> <span class="cf">for</span> i, w <span class="kw">in</span> <span class="bu">enumerate</span>(words)}</span>
+<span id="cb4-3"><a href="#cb4-3"></a>word2idx[<span class="st">'PAD'</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>word2idx[<span class="st">'UNK'</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a>tags <span class="op">=</span> <span class="bu">set</span>(df[<span class="st">'label'</span>].values)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>tag2idx <span class="op">=</span> {t: i <span class="op">+</span> <span class="dv">1</span> <span class="cf">for</span> i, t <span class="kw">in</span> <span class="bu">enumerate</span>(tags)}</span>
+<span id="cb4-8"><a href="#cb4-8"></a>tag2idx[<span class="st">'PAD'</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>X <span class="op">=</span> [[word2idx.get(w, <span class="dv">1</span>) <span class="cf">for</span> w <span class="kw">in</span> sentence.split()] <span class="cf">for</span> sentence <span class="kw">in</span> df[<span class="st">'text'</span>].values]</span>
+<span id="cb4-11"><a href="#cb4-11"></a>y <span class="op">=</span> [[tag2idx[t] <span class="cf">for</span> t <span class="kw">in</span> sentence.split()] <span class="cf">for</span> sentence <span class="kw">in</span> df[<span class="st">'label'</span>].values]</span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a>maxlen <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(x) <span class="cf">for</span> x <span class="kw">in</span> X)</span>
+<span id="cb4-14"><a href="#cb4-14"></a>X <span class="op">=</span> pad_sequences(X, padding<span class="op">=</span><span class="st">'post'</span>, maxlen<span class="op">=</span>maxlen)</span>
+<span id="cb4-15"><a href="#cb4-15"></a>y <span class="op">=</span> pad_sequences(y, padding<span class="op">=</span><span class="st">'post'</span>, maxlen<span class="op">=</span>maxlen)</span>
+<span id="cb4-16"><a href="#cb4-16"></a>y <span class="op">=</span> to_categorical(y, num_classes<span class="op">=</span><span class="bu">len</span>(tag2idx))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="after-the-data-is-manipulated-the-rnn-model-is-created-and-compiled-with-the-use-of-tensorflow" class="slide level2">
 <h2>After the data is manipulated the RNN model is created and compiled with the use of tensorflow</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="op">=</span> tf.keras.Sequential([</span>
-<span id="cb8-2"><a href="#cb8-2"></a>    tf.keras.layers.Embedding(<span class="bu">len</span>(word2idx), <span class="dv">128</span>),</span>
-<span id="cb8-3"><a href="#cb8-3"></a>    tf.keras.layers.LSTM(<span class="dv">128</span>, return_sequences<span class="op">=</span><span class="va">True</span>),</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    tf.keras.layers.Dropout(<span class="fl">0.2</span>),</span>
-<span id="cb8-5"><a href="#cb8-5"></a>    tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(<span class="bu">len</span>(tag2idx), activation<span class="op">=</span><span class="st">'softmax'</span>))</span>
-<span id="cb8-6"><a href="#cb8-6"></a>])</span>
-<span id="cb8-7"><a href="#cb8-7"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'adam'</span>, loss<span class="op">=</span><span class="st">'categorical_crossentropy'</span>, metrics<span class="op">=</span>[<span class="st">'accuracy'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>model <span class="op">=</span> tf.keras.Sequential([</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    tf.keras.layers.Embedding(<span class="bu">len</span>(word2idx), <span class="dv">128</span>),</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    tf.keras.layers.LSTM(<span class="dv">128</span>, return_sequences<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    tf.keras.layers.Dropout(<span class="fl">0.2</span>),</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(<span class="bu">len</span>(tag2idx), activation<span class="op">=</span><span class="st">'softmax'</span>))</span>
+<span id="cb5-6"><a href="#cb5-6"></a>])</span>
+<span id="cb5-7"><a href="#cb5-7"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'adam'</span>, loss<span class="op">=</span><span class="st">'categorical_crossentropy'</span>, metrics<span class="op">=</span>[<span class="st">'accuracy'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="lastly-the-model-is-fitted-and-the-accuracy-is-calculated" class="slide level2">
 <h2>Lastly the model is fitted and the accuracy is calculated</h2>
 <div>
 <p>The RNN model’s accuracy is 0.9967</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>model.fit(X, y, batch_size<span class="op">=</span><span class="dv">32</span>, epochs<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 1/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 6s - loss: 1.0304 - accuracy: 0.8877 - 6s/epoch - 585ms/step</code></pre>
+<pre><code>10/10 - 6s - loss: 0.9374 - accuracy: 0.9202 - 6s/epoch - 605ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 2/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0297 - accuracy: 0.9967 - 3s/epoch - 300ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0247 - accuracy: 0.9967 - 3s/epoch - 337ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 3/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0125 - accuracy: 0.9967 - 3s/epoch - 298ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0125 - accuracy: 0.9967 - 3s/epoch - 315ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 4/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0103 - accuracy: 0.9967 - 3s/epoch - 297ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0105 - accuracy: 0.9967 - 3s/epoch - 316ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 5/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0095 - accuracy: 0.9967 - 3s/epoch - 296ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0097 - accuracy: 0.9967 - 3s/epoch - 335ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 6/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0091 - accuracy: 0.9967 - 3s/epoch - 314ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0092 - accuracy: 0.9967 - 3s/epoch - 307ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 7/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0088 - accuracy: 0.9967 - 3s/epoch - 298ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0090 - accuracy: 0.9967 - 3s/epoch - 309ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 8/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0086 - accuracy: 0.9967 - 3s/epoch - 313ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0087 - accuracy: 0.9967 - 3s/epoch - 312ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 9/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0084 - accuracy: 0.9967 - 3s/epoch - 297ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0085 - accuracy: 0.9967 - 3s/epoch - 312ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 10/10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10/10 - 3s - loss: 0.0082 - accuracy: 0.9967 - 3s/epoch - 298ms/step</code></pre>
+<pre><code>10/10 - 3s - loss: 0.0083 - accuracy: 0.9967 - 3s/epoch - 314ms/step</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>&lt;keras.callbacks.History at 0x127614250&gt;</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>&lt;keras.callbacks.History at 0x1291e4950&gt;</code></pre>
 </div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Screen%20Shot%202023-04-26%20at%208.56.26%20PM.png" width="413"></p>
+</figure>
 </div>
 </div>
 </section>
@@ -968,6 +906,19 @@ $\text{f(x)} = (e^x - e^{-x})/(e^x + e^{-x})$\</code></pre>
 <li class="fragment">NER is a key NLP task that involves identifying named entities in a text.</li>
 <li class="fragment">Deep learning techniques have become more mainstream in the NER field due to their major advantages.</li>
 <li class="fragment">The techniques we have chose, RNN and Transformer Model, have shown this to be true for various situations.</li>
+</ul>
+</div>
+</section>
+<section id="conclusion-1" class="slide level2">
+<h2>Conclusion</h2>
+<div>
+<ul>
+<li class="fragment"><p>The accuracy of our models were:</p>
+<ul>
+<li class="fragment">Transformer Model: 0.9375</li>
+<li class="fragment">RNN: 0.9967</li>
+</ul></li>
+<li class="fragment"><p>This shoes that when doing NER for our chosen dataset, RNN was more effective after training, but that both are over 90% accurate given the data that we have used</p></li>
 </ul>
 </div>
 <div class="footer footer-default">
