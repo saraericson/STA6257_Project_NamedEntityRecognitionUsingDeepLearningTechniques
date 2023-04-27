@@ -130,7 +130,7 @@ We will use the dataset called corona2 from Kaggle to identify Natural Entity Re
 
 ::: incremental
 | Column Name | Type    | Description                                         |
-|-------------|---------|-----------------------------------------------------|
+|-------------------|-------------------|----------------------------------|
 | Text        | string  | Sentence including the labels                       |
 | Starts      | integer | Position on where the label starts                  |
 | Ends        | integer | Position on where the label ends                    |
@@ -478,9 +478,6 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 ::: nonincremental
 The RNN model's accuracy is 0.9967
 
-```{python}
-model.fit(X, y, batch_size=32, epochs=10, verbose=2)
-```
 
 ![](images/Screen%20Shot%202023-04-26%20at%208.56.26%20PM.png){fig-align="center" width="413"}
 :::
