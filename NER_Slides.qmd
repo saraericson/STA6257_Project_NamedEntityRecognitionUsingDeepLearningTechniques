@@ -453,15 +453,6 @@ y = to_categorical(y, num_classes=len(tag2idx))
 
 ## After the data is manipulated the RNN model is created and compiled with the use of tensorflow
 
-```{python}
-model = tf.keras.Sequential([
-    tf.keras.layers.Embedding(len(word2idx), 128),
-    tf.keras.layers.LSTM(128, return_sequences=True),
-    tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(len(tag2idx), activation='softmax'))
-])
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-```
 
 ``` python
 model = tf.keras.Sequential([
@@ -477,7 +468,9 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 ::: nonincremental
 The RNN model's accuracy is 0.9967
-
+``` python
+model.fit(X, y, batch_size=32, epochs=10, verbose=2)
+```
 
 ![](images/Screen%20Shot%202023-04-26%20at%208.56.26%20PM.png){fig-align="center" width="413"}
 :::
