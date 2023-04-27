@@ -117,7 +117,7 @@ editor: visual
 ## Dataset
 
 ::: incremental
-We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens. Similarly to the dataset used in the dataset was manually tagged for training.
+We will use the dataset called corona2 from Kaggle to identify Natural Entity Recognition to identify Medical Condition, Medicine names and Pathogens.
 
 -   Labels:
 
@@ -453,7 +453,6 @@ y = to_categorical(y, num_classes=len(tag2idx))
 
 ## After the data is manipulated the RNN model is created and compiled with the use of tensorflow
 
-
 ``` python
 model = tf.keras.Sequential([
     tf.keras.layers.Embedding(len(word2idx), 128),
@@ -468,6 +467,7 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 ::: nonincremental
 The RNN model's accuracy is 0.9967
+
 ``` python
 model.fit(X, y, batch_size=32, epochs=10, verbose=2)
 ```
@@ -491,5 +491,5 @@ model.fit(X, y, batch_size=32, epochs=10, verbose=2)
     -   Transformer Model: 0.9375
     -   RNN: 0.9967
 
--   This shoes that when doing NER for our chosen dataset, RNN was more effective after training, but that both are over 90% accurate given the data that we have used
+-   This shows that when doing NER for our chosen dataset, RNN was more effective after training, but that both are over 90% accurate given the data that we have used
 :::
